@@ -1,1 +1,3 @@
-code/backend/backend/__pycache__
+code/backend/backend/__pycache__/
+code/backend/BackendManagement/__pycache__/
+code/backend/BackendManagement/migrations/__pycache__/
