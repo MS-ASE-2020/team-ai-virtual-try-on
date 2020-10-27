@@ -12,7 +12,7 @@ class Customer(models.Model):
     self_pics = models.ImageField('self_pics', upload_to=user_directory_path)
 
     class Meta:
-        db_table = 'User'
+        db_table = 'Customer'
 
 
 class Saler(models.Model):
