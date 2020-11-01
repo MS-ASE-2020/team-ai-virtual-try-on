@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
 from rest_framework import status
@@ -10,11 +9,11 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 from BackendManagement.serializers import SalerSerializer, SalerListSerializer
-from BackendManagement.models import Saler
+from BackendManagement.models import MyUser
 
 
 class SalerViewSet(viewsets.ModelViewSet):
-    queryset = Saler.objects.all()
+    queryset = MyUser.objects.all()
     serializer_class = SalerListSerializer
 
 

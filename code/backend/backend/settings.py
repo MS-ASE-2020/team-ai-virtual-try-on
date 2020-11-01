@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 
-AUTH_USER_MODEL = 'BackendManagement.Saler'
+AUTH_USER_MODEL = 'BackendManagement.MyUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.AutoSchema',
