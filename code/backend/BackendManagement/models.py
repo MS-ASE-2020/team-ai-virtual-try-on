@@ -1,23 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 
 
 def user_directory_path(instance, filename):
     if instance.is_saler:
-        return './pics/saler_{}/{}'.format(instance.username, filename)
-    return './pics/customer_{}/{}'.format(instance.username, filename)
-
-
-class Customer(models.Model):
-    username = models.CharField('username', max_length=20, primary_key=True)
-    password = models.CharField('password', max_length=20, blank=False)
-    phone_number = models.DecimalField('phone_number', max_digits=11, decimal_places=0, blank=False)
-    self_pics = models.ImageField('self_pics', upload_to=user_directory_path)
-
-    class Meta:
-        db_table = 'Customer'
+        return './pics/salers/saler_{}/{}'.format(instance.username, filename)
+    return './pics/customers/customer_{}/{}'.format(instance.username, filename)
 
 
 class MyUser(AbstractUser):
