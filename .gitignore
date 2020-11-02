@@ -5,3 +5,4 @@ code/backend/BackendManagement/migrations/__pycache__/
 code/backend/.vscode/
 code/backend/db.sqlite3
 code/backend/pics/
+code/backend/media/

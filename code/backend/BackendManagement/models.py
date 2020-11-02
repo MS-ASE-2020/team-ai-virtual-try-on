@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractUser
 
 def user_directory_path(instance, filename):
     if instance.is_saler:
-        return './pics/salers/saler_{}/{}'.format(instance.username, filename)
-    return './pics/customers/customer_{}/{}'.format(instance.username, filename)
+        return 'salers/saler_{}/{}'.format(instance.username, filename)
+    return 'customers/customer_{}/{}'.format(instance.username, filename)
 
 
 class MyUser(AbstractUser):
