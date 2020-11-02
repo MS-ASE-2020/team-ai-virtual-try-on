@@ -4,21 +4,24 @@ from django.contrib.auth.models import AbstractUser
 
 def user_directory_path(instance, filename):
     if instance.is_saler:
-        return 'salers/saler_{}/{}'.format(instance.username, filename)
-    return 'customers/customer_{}/{}'.format(instance.username, filename)
+        return 'salers/saler_{}/{}'.format(instance.name, filename)
+    return 'customers/customer_{}/{}'.format(instance.name, filename)
 
 
 class MyUser(AbstractUser):
+    username = None
+    name = models.CharField('name', max_length=20, primary_key=True)
     phone_number = models.DecimalField('phone_number', max_digits=11, decimal_places=0, blank=False)
     is_saler = models.BooleanField(default=False)
     self_pics = models.ImageField('self_pics', upload_to=user_directory_path)
+    USERNAME_FIELD = 'name'
     REQUIRED_FIELDS = ['phone_number', 'is_saler']
 
     class Meta:
         db_table = 'MyUser'
     
     def __str__(self):
-        return self.username
+        return self.name
         
 
 class Product(models.Model):

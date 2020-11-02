@@ -15,6 +15,7 @@ from BackendManagement.models import MyUser
 class SalerViewSet(viewsets.ModelViewSet):
     queryset = MyUser.objects.filter(is_saler=True)
     serializer_class = SalerListSerializer
+    http_method_names = ['get']
 
 
 class SalerSignupViewSet(viewsets.GenericViewSet):
@@ -25,7 +26,7 @@ class SalerSignupViewSet(viewsets.GenericViewSet):
         try:
             data = request.data.copy()
             data['password'] = make_password(data['password'])
-            data['is_saler'] = True
+            data['is_saler'] = 'true'
             serializer = SalerSerializer(data=data)
             serializer.is_valid(True)
             serializer.save()
@@ -37,6 +38,7 @@ class SalerSignupViewSet(viewsets.GenericViewSet):
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = MyUser.objects.filter(is_saler=False)
     serializer_class = CustomerListSerializer
+    http_method_names = ['get']
 
 
 class CustomerSignupViewSet(viewsets.GenericViewSet):
@@ -47,7 +49,7 @@ class CustomerSignupViewSet(viewsets.GenericViewSet):
         try:
             data = request.data.copy()
             data['password'] = make_password(data['password'])
-            data['is_saler'] = False
+            data['is_saler'] = 'false'
             serializer = CustomerSerializer(data=data)
             serializer.is_valid(True)
             serializer.save()
