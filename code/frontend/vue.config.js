@@ -7,12 +7,13 @@ module.exports = {
       title: 'Home',
       chunks: [ 'chunk-vendors', 'chunk-common', 'index' ]
     },
-    // 'search': {
-    //   entry: './src/pages/Search/main.js',
-    //   template: 'public/index.html',
-    //   title: 'About',
-    //   chunks: [ 'chunk-vendors', 'chunk-common', 'about' ]
-    // }
+    'productdetail': {
+      entry: './src/pages/ProductDetail/main.js',
+      template: 'public/index.html',
+      filename: 'productdetail.html',
+      title: 'Product Detail',
+      chunks: [ 'chunk-vendors', 'chunk-common', 'productdetail' ]
+    }
   },
   "transpileDependencies": [
     "vuetify"
