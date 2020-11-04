@@ -26,48 +26,50 @@
         </v-row>
       </v-col>
       <v-col cols="12" md="6" class="px-16 py-md-16">
+        <v-row class="py-6">
+          <h2>{{ productName }}</h2>
+        </v-row>
+
+        <v-row class="py-6">
+          价格<span>{{ price }}</span>
+        </v-row>
+
+        <v-row align="center">
+          <div>TryOn 评分</div>
+          <v-rating
+            v-model="rating"
+            background-color="orange lighten-3"
+            color="orange"
+            length="5"
+            large
+            hover
+            dense
+          ></v-rating>
+        </v-row>
+        <v-row class="ma-4">
+          <v-col>
+            <v-row
+              v-for="(rate, i) in rateList"
+              :key="i"
+              cols="12"
+              align="center"
+            >
+              <div class="mx-2">{{ 5 - i }}分</div>
+              <v-sheet width="400">
+                <v-progress-linear height="20" :value="rate">
+                  <strong>{{ Math.ceil(rate) }}%</strong>
+                </v-progress-linear>
+              </v-sheet>
+            </v-row>
+          </v-col>
+        </v-row>
         <v-row>
-          <v-col cols="12" class="py-6">
-            <h2>{{ productName }}</h2>
-          </v-col>
-          <v-col cols="12" class="py-6">
-            <p>
-              价格<span>{{ price }}</span>
-            </p>
-          </v-col>
-          <v-col cols="2"><p>TryOn 评分</p> </v-col>
-          <v-col cols="8">
-            <v-rating
-              v-model="rating"
-              background-color="orange lighten-3"
-              color="orange"
-              length="5"
-              large
-              hover
-              dense
-            ></v-rating>
-          </v-col>
-          <v-col cols="12">
-            <v-sheet width="300" class="mx-4">
-              <div v-for="(rate, i) in rateList" :key="i">
-                <v-row class="my-n3">
-                  <v-col cols="2">{{ 5 - i }}分</v-col>
-                  <v-col cols="10">
-                    <v-progress-linear height="20" :value="rate">
-                      <strong>{{ Math.ceil(rate) }}%</strong>
-                    </v-progress-linear>
-                  </v-col>
-                </v-row>
-              </div>
-            </v-sheet>
-          </v-col>
           <v-col cols="4" class="my-16">
             <v-btn x-large>立即购买</v-btn>
           </v-col>
           <v-col cols="4" class="my-16">
             <v-btn x-large>上传照片</v-btn>
           </v-col>
-
         </v-row>
       </v-col>
       <v-spacer></v-spacer>
