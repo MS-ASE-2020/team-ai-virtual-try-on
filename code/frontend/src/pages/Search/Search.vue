@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row v-for="i in [1, 2]" :key="i">
-      <v-col v-for="j in [1, 2, 3, 4]" :key="(i - 1) * 4 + j" cols="3">
+    <v-row>
+      <v-col v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9 ,10, 11,12]" :key="i" cols="12" sm="6" md="4" lg="3">
         <v-hover v-slot="{ hover }">
           <v-card class="mx-auto" max-width="374">
             <v-img
@@ -25,7 +25,6 @@
         </v-hover>
       </v-col>
     </v-row>
-
     <v-row justify="center" class="my-12">
       <v-pagination v-model="page" :length="6"></v-pagination
     ></v-row>

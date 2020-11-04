@@ -2,30 +2,29 @@
   <v-container>
     <v-row>
       <v-spacer></v-spacer>
-      <v-col cols="12" md="4">
-        <v-row class="text-center">
-          <v-col cols="12" class="py-md-16">
-            <v-carousel
-              v-model="model"
-              hide-delimiter-background
-              hide-delimiters
-            >
-              <v-carousel-item v-for="(color, i) in colors" :key="color">
-                <v-sheet :color="color" height="100%" tile>
-                  <v-row class="fill-height" align="center" justify="center">
-                    <div class="display-3">Slide {{ i + 1 }}</div>
-                  </v-row>
-                </v-sheet>
-              </v-carousel-item>
-            </v-carousel>
-          </v-col>
-          <v-col cols="12">
-            <v-btn class="mx-4">服装</v-btn>
-            <v-btn class="mx-4">try on</v-btn>
-          </v-col>
+      <v-col cols="12" md="5">
+        <v-row justify="center" class="my-md-16">
+          <v-carousel height="400" v-model="model" hide-delimiter-background hide-delimiters>
+            <v-carousel-item v-for="color in colors" :key="color">
+              <!-- <v-sheet :color="color" height="100%" tile>
+                <v-row class="fill-height" align="center" justify="center">
+                  <div class="display-3">Slide {{ i + 1 }}</div>
+                </v-row>
+              </v-sheet> -->
+              <v-img
+                height="100%"
+                tile
+                src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+              ></v-img>
+            </v-carousel-item>
+          </v-carousel>
+        </v-row>
+        <v-row justify="center">
+          <v-btn class="ma-4">服装</v-btn>
+          <v-btn class="ma-4">try on</v-btn>
         </v-row>
       </v-col>
-      <v-col cols="12" md="6" class="px-16 py-md-16">
+      <v-col cols="12" md="7" class="px-16 py-md-16">
         <v-row class="py-6">
           <h2>{{ productName }}</h2>
         </v-row>
@@ -55,7 +54,7 @@
               align="center"
             >
               <div class="mx-2">{{ 5 - i }}分</div>
-              <v-sheet width="400">
+              <v-sheet width="300">
                 <v-progress-linear height="20" :value="rate">
                   <strong>{{ Math.ceil(rate) }}%</strong>
                 </v-progress-linear>
@@ -63,13 +62,9 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row>
-          <v-col cols="4" class="my-16">
-            <v-btn x-large>立即购买</v-btn>
-          </v-col>
-          <v-col cols="4" class="my-16">
-            <v-btn x-large>上传照片</v-btn>
-          </v-col>
+        <v-row justify="center">
+          <v-btn class="mx-4 my-6" x-large>立即购买</v-btn>
+          <v-btn class="mx-4 my-6" x-large>上传照片</v-btn>
         </v-row>
       </v-col>
       <v-spacer></v-spacer>
