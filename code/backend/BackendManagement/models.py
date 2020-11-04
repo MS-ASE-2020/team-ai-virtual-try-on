@@ -8,6 +8,10 @@ def user_directory_path(instance, filename):
     return 'customers/customer_{}/{}'.format(instance.name, filename)
 
 
+def product_directory_path(instance, filename):
+    return 'products/{}/{}'.format(instance.name, filename)
+
+
 class MyUser(AbstractUser):
     username = None
     name = models.CharField('name', max_length=20, primary_key=True)
@@ -25,13 +29,13 @@ class MyUser(AbstractUser):
         
 
 class Product(models.Model):
-    ID = models.CharField('ID', max_length=20, auto_created=True, primary_key=True)
     name = models.CharField('name', max_length=20, blank=False)
     price = models.FloatField('price', default=0.0, blank=False)
     link = models.URLField('link', max_length=255, default="https://www.taobao.com")
     overall_score = models.FloatField('overall_score', default=0)
     number_people_scoring = models.DecimalField('number_people_scoring', max_digits=10, decimal_places=0, default=0)
     owned_saler = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    pics = models.ImageField('pics', upload_to=product_directory_path)
 
     class Meta:
         db_table = 'Product'

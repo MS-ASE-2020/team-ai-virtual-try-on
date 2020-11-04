@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 from BackendManagement.serializers import *
-from BackendManagement.models import MyUser
+from BackendManagement.models import *
 
 
 class SalerViewSet(viewsets.ModelViewSet):
@@ -56,3 +56,8 @@ class CustomerSignupViewSet(viewsets.GenericViewSet):
             return Response('Successful create a new customer', status.HTTP_201_CREATED)
         except Exception as e:
             return Response(str(e), status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
