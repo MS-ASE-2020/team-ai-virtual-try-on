@@ -27,10 +27,10 @@ export default {
     //
   }),
 
-  methods:{
-    foo(){
-
+  methods: {
+    foo() {
+      window.location.href = "/customerinfo";
     },
-  }
+  },
 };
 </script>
