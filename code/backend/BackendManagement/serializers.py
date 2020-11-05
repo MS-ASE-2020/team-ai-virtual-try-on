@@ -14,7 +14,8 @@ class SalerSerializer(serializers.ModelSerializer):
 class SalerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
-        fields = ('name', 'phone_number', 'is_saler')
+        extra_kwargs = {'password': {'write_only': True}, 'name': {'read_only': True}, 'is_saler': {'read_only': True}}
+        fields = ('name', 'phone_number', 'password', 'is_saler')
     
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -26,7 +27,8 @@ class CustomerSerializer(serializers.ModelSerializer):
 class CustomerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
-        fields = ('name', 'phone_number', 'is_saler', 'self_pics')
+        extra_kwargs = {'password': {'write_only': True}, 'name': {'read_only': True}, 'is_saler': {'read_only': True}}
+        fields = ('name', 'phone_number', 'password', 'is_saler', 'self_pics')
 
 
 class ProductSerializer(serializers.ModelSerializer):
