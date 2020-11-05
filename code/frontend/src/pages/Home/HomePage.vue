@@ -1,5 +1,6 @@
 <template>
   <v-container class="text-center">
+    <v-responsive max-width="980" class="mx-auto">
     <v-row>
       <v-col cols="12" class="mt-10 my-5">
         <h1>Virtual Try-On</h1>
@@ -27,6 +28,7 @@
         <v-btn class="mx-4">运气不错</v-btn>
       </v-col>
     </v-row>
+    </v-responsive>
   </v-container>
 </template>
 

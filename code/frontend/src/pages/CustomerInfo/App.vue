@@ -1,22 +1,21 @@
 <template>
   <v-app>
-    <topbar/>
+    <topbar />
     <v-main>
-      <search />
+      <customerinfo />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import search from "./Search";
-import topbar from "@/components/TopBar"
-
+import customerinfo from "./CustomerInfo";
+import topbar from "@/components/TopBar";
 
 export default {
   name: "App",
 
   components: {
-    search,
+    customerinfo,
     topbar,
   },
 
