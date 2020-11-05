@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-responsive max-width="1368" class="mx-auto">
     <v-row>
       <v-col v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9 ,10, 11,12]" :key="i" cols="12" sm="6" md="4" lg="3">
         <v-hover v-slot="{ hover }">
@@ -28,6 +29,7 @@
     <v-row justify="center" class="my-12">
       <v-pagination v-model="page" :length="6"></v-pagination
     ></v-row>
+    </v-responsive>
   </v-container>
 </template>
 

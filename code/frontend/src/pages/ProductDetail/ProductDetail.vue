@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-responsive max-width="1368" class="mx-auto">
     <v-row>
       <v-spacer></v-spacer>
       <v-col cols="12" md="5">
@@ -62,13 +63,14 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row justify="center">
+        <v-row >
           <v-btn class="mx-4 my-6" x-large>立即购买</v-btn>
           <v-btn class="mx-4 my-6" x-large>上传照片</v-btn>
         </v-row>
       </v-col>
       <v-spacer></v-spacer>
     </v-row>
+    </v-responsive>
   </v-container>
 </template>
 
