@@ -4,7 +4,7 @@
     <v-row>
       <v-col v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9 ,10, 11,12]" :key="i" cols="12" sm="6" md="4" lg="3">
         <v-hover v-slot="{ hover }">
-          <v-card class="mx-auto" max-width="374">
+          <v-card class="mx-auto" href="/productdetail" max-width="374">
             <v-img
               height="300"
               src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
