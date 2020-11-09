@@ -1,13 +1,15 @@
+import os
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
+from django.conf import settings
 
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
 
 from BackendManagement.serializers import *
 from BackendManagement.models import *
@@ -70,25 +72,23 @@ class CustomerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        queryset = MyUser.objects.filter(is_saler=False, pk=pk)
-        if not queryset.exists():
-            return Response({
-                'status': 'Failed',
-                'message': 'Customer not exist'}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            data = request.data.copy()
-            print(data)
-            if data.get('password'):
-                data['password'] = make_password(data['password'])
-                queryset.update(name=pk, password=data['password'])
-            if data.get('phone_number'):
-                queryset.update(name=pk, phone_number=data['phone_number'])
-            if data.get('self_pics'):
-                queryset.update(name=pk, self_pics=data['self_pics'])
-        except IntegrityError as e:
-            return Response({'status': 'Internal Error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response({'status': 'Success', 'message': "Update the customer's info successfully"}, status.HTTP_200_OK)
+        customer = MyUser.objects.get(pk=pk, is_saler=False)
+        data = request.data.copy()
+        print(customer, customer.password, customer.phone_number, customer.self_pics)
+        data['password'] = make_password(data['password']) if data.get('password') else customer.password
+        data['phone_number'] = data['phone_number'] if data.get('phone_number') else customer.phone_number
+        data['self_pics'] = data['self_pics'] if data.get('self_pics') else customer.self_pics
+        if data.get('self_pics'):
+            pics_path = os.path.join(settings.MEDIA_ROOT, 'customers', 'customer_' + str(customer))
+            previous_pics = os.listdir(pics_path)
+            for previous_pic in previous_pics:
+                os.remove(os.path.join(pics_path, previous_pic))
+            print(previous_pics)
+        serializer = CustomerListSerializer(customer, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status': 'Success', 'message': "Update the customer's info successfully"}, status.HTTP_200_OK)
+        return Response({'status': 'Internal Error', 'message': "Failed to update customer information."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CustomerSignupViewSet(viewsets.GenericViewSet):

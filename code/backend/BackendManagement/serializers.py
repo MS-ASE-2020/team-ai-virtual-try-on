@@ -25,6 +25,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class CustomerListSerializer(serializers.ModelSerializer):
+    # self_pics = serializers.ImageField()
     class Meta:
         model = MyUser
         extra_kwargs = {'password': {'write_only': True}, 'name': {'read_only': True}, 'is_saler': {'read_only': True}}
