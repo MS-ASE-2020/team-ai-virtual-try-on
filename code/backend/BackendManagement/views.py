@@ -74,7 +74,6 @@ class CustomerViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         customer = MyUser.objects.get(pk=pk, is_saler=False)
         data = request.data.copy()
-        print(customer, customer.password, customer.phone_number, customer.self_pics)
         data['password'] = make_password(data['password']) if data.get('password') else customer.password
         data['phone_number'] = data['phone_number'] if data.get('phone_number') else customer.phone_number
         data['self_pics'] = data['self_pics'] if data.get('self_pics') else customer.self_pics
@@ -82,8 +81,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
             pics_path = os.path.join(settings.MEDIA_ROOT, 'customers', 'customer_' + str(customer))
             previous_pics = os.listdir(pics_path)
             for previous_pic in previous_pics:
-                os.remove(os.path.join(pics_path, previous_pic))
-            print(previous_pics)
+                if os.path.join('customers', 'customer_' + str(customer), previous_pic) != data['self_pics']:
+                    os.remove(os.path.join(pics_path, previous_pic))
         serializer = CustomerListSerializer(customer, data=data)
         if serializer.is_valid():
             serializer.save()
