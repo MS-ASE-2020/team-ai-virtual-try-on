@@ -27,6 +27,13 @@ module.exports = {
       filename: 'customerinfo.html',
       title: 'Customer Info',
       chunks: [ 'chunk-vendors', 'chunk-common', 'customerinfo' ]
+    },
+    'salerinfo': {
+      entry: './src/pages/SalerInfo/main.js',
+      template: 'public/index.html',
+      filename: 'salerinfo.html',
+      title: 'Saler Info',
+      chunks: [ 'chunk-vendors', 'chunk-common', 'salerinfo' ]
     }
   },
   "transpileDependencies": [
