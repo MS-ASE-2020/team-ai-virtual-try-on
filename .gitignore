@@ -1,8 +1,6 @@
-code/backend/backend/__pycache__/
-code/backend/BackendManagement/__pycache__/
-code/backend/BackendManagement/migrations/__pycache__/
+__pycache__/
 .vscode/
-code/backend/.vscode/
-code/backend/db.sqlite3
+*.sqlite3
 code/backend/pics/
 code/backend/media/
+env/
