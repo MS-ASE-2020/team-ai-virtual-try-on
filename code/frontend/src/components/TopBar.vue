@@ -5,7 +5,7 @@
     </v-toolbar-title>
     <v-sheet class="mx-4" height="40" width="360" color="transparent">
       <v-text-field
-        @keypress.enter="bar"
+        @keypress.enter="search"
         single-line
         solo
         dense
@@ -15,7 +15,7 @@
       </v-text-field>
     </v-sheet>
     <v-spacer></v-spacer>
-    <v-icon @click="foo">mdi-account</v-icon>
+    <v-icon @click="bar">mdi-account</v-icon>
   </v-app-bar>
 </template>
 
@@ -23,12 +23,12 @@
 export default {
   name: "TopBar",
   methods: {
-    foo() {
-      window.location.href = "/customerinfo";
+    search() {
+      window.location.href = "/search" + "?q=" + this.searchInput;
     },
-    bar() {
-      window.location.href = "/search";
-    },
+    bar(){
+      window.location.href = "/customerinfo"
+    }
   },
 };
 </script>

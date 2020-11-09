@@ -12,12 +12,13 @@
         <v-spacer> </v-spacer>
         <v-col cols="8">
           <v-text-field
-            @keypress.enter="foo"
+            @keypress.enter="search"
             prepend-inner-icon="mdi-magnify"
             rounded
             single-line
             outlined
             label=""
+            v-model="searchInput"
           >
           </v-text-field>
         </v-col>
@@ -25,8 +26,8 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-btn class="mx-4" @click="foo">搜索</v-btn>
-          <v-btn class="mx-4" @click="bar">运气不错</v-btn>
+          <v-btn class="mx-4" @click="search">搜索</v-btn>
+          <v-btn class="mx-4" @click="lucky">运气不错</v-btn>
         </v-col>
       </v-row>
     </v-responsive>
@@ -34,17 +35,27 @@
 </template>
 
 <script>
+import rqt from '@/variables.js'
+
 export default {
   name: "HomePage",
   data: () => ({
-    //
+    searchInput: "",
   }),
   methods: {
-    foo() {
-      window.location.href = "/search";
+    search() {
+      window.location.href = "/search" + "?q=" + this.searchInput;
     },
-    bar() {
-      window.location.href = "/productdetail"
+    lucky() {
+      this.$http
+        .get(rqt.api+"/api/products/")
+        .then((response) => {
+          console.log(response)
+          window.location.href = "/productdetail?id=1"
+        })
+        .catch((error) => {
+          alert(error)
+        });
     },
   },
 };

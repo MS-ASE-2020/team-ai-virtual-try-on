@@ -1,5 +1,9 @@
 # frontend
 
+test options:
+
+    chrome.exe  --disable-web-security --user-data-dir='C:\Users\user\Downloads\test\'
+
 ## Project setup
 ```
 npm install
