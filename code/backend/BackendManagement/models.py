@@ -32,9 +32,12 @@ class Product(models.Model):
     name = models.CharField('name', max_length=20, blank=False)
     price = models.FloatField('price', default=0.0, blank=False)
     link = models.URLField('link', max_length=255, default="https://www.taobao.com")
-    overall_score = models.FloatField('overall_score', default=0)
-    number_people_scoring = models.DecimalField('number_people_scoring', max_digits=10, decimal_places=0, default=0)
-    owned_saler = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    number_people_scoring_one = models.IntegerField('number_people_scoring_one', default=0)
+    number_people_scoring_two = models.IntegerField('number_people_scoring_two', default=0)
+    number_people_scoring_three = models.IntegerField('number_people_scoring_three', default=0)
+    number_people_scoring_four = models.IntegerField('number_people_scoring_four', default=0)
+    number_people_scoring_five = models.IntegerField('number_people_scoring_five', default=0)
+    owned_saler = models.ForeignKey(MyUser, on_delete=models.CASCADE, limit_choices_to={'is_saler': True})
     pics = models.ImageField('pics', upload_to=product_directory_path)
 
     class Meta:

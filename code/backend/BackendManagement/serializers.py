@@ -35,4 +35,17 @@ class CustomerListSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('name', 'price', 'link', 'overall_score', 'number_people_scoring', 'owned_saler', 'pics')
+        extra_kwargs = {'id': {'read_only': True}}
+        fields = (
+            'id',
+            'name',
+            'price',
+            'link',
+            'number_people_scoring_one',
+            'number_people_scoring_two',
+            'number_people_scoring_three',
+            'number_people_scoring_four',
+            'number_people_scoring_five',
+            'owned_saler',
+            'pics'
+        )
