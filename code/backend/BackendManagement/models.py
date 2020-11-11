@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+import uuid
 
 def user_directory_path(instance, filename):
     if instance.is_saler:
@@ -9,7 +9,7 @@ def user_directory_path(instance, filename):
 
 
 def product_directory_path(instance, filename):
-    return 'products/{}/{}'.format(instance.name, filename)
+    return 'products/{}/{}'.format(instance.id, filename)
 
 
 class MyUser(AbstractUser):
@@ -29,6 +29,7 @@ class MyUser(AbstractUser):
         
 
 class Product(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField('name', max_length=20, blank=False)
     price = models.FloatField('price', default=0.0, blank=False)
     link = models.URLField('link', max_length=255, default="https://www.taobao.com")

@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.hashers import make_password
@@ -110,3 +111,20 @@ class CustomerSignupViewSet(viewsets.GenericViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    def destroy(self, request, pk=None):
+        queryset = Product.objects.all()
+        obj = get_object_or_404(queryset, pk=pk)
+
+        try:
+            obj.delete()
+            shutil.rmtree(os.path.join(settings.MEDIA_ROOT, 'products', pk))
+        except Exception as e:
+            return Response({
+                'status': 'Bad Request',
+                'message': str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            'status': 'Success',
+            'message': 'Delete the Product Successfully'
+        }, status=status.HTTP_200_OK)
