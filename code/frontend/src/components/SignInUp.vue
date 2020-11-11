@@ -36,6 +36,7 @@
                       label="Name*"
                       hint="Your name should be unique from others"
                       required
+                      v-model="signUpData.name"
                     ></v-text-field>
                   </v-col>
 
@@ -43,6 +44,7 @@
                     <v-text-field
                       label="Phone number*"
                       hint="Any number string with length of 11"
+                      v-model="signUpData.phone_number"
                     ></v-text-field>
                   </v-col>
 
@@ -51,7 +53,19 @@
                       label="Password*"
                       type="password"
                       required
+                      v-model="signUpData.password"
                     ></v-text-field>
+
+                    <v-col v-if="item.showStat && !isSaler" cols="12">
+                      <v-file-input
+                        accept="image/*"
+                        show-size
+                        label="Upload a full-body image"
+                        filled
+                        prepend-icon="mdi-camera"
+                        @change="selectFile"
+                      ></v-file-input>
+                    </v-col>
                   </v-col>
                 </v-row>
               </v-container>
@@ -59,8 +73,11 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog = false">
-                {{ item.name }}
+              <v-btn v-if="item.showStat" color="blue darken-1" @click="signUp">
+                Sign Up
+              </v-btn>
+              <v-btn v-else color="blue darken-1" text @click="signIn">
+                Sign In
               </v-btn>
               <v-btn color="blue darken-1" text @click="dialog = false">
                 Cancel
@@ -74,6 +91,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import rqt from "@/variables.js";
+
 export default {
   name: "SignInUp",
   data: () => ({
@@ -81,9 +101,78 @@ export default {
       { name: "Sign in", showStat: false },
       { name: "Sign up", showStat: true },
     ],
+    signUpData: {
+      name: null,
+      password: null,
+      phone_number: null,
+    },
     isSaler: 0,
     dialog: false,
     tab: null,
+    currentFile: null,
   }),
+  methods: {
+    selectFile(file) {
+      this.currentFile = file;
+    },
+    signIn() {
+      // alert("This feature has not been implemented!");
+      let url = rqt.api;
+      if (this.isSaler) {
+        url += "/api/saler/login";
+      } else {
+        url += "/api/customer/login";
+      }
+      axios
+        .post(url, this.signInData)
+        .then((response) => {
+          console.log(response);
+          confirm("Sign in successfully!");
+          let data = response;
+          if (data.is_saler) {
+            window.location.href = "/customerinfo?id=" + data.name;
+          } else {
+            window.location.href = "/salerinfo?id=" + data.name;
+          }
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+    signUp() {
+      const formData = new FormData();
+
+      Object.keys(this.signUpData).forEach((key) =>
+        formData.append(key, this.signUpData[key])
+      );
+      let url = rqt.api;
+      if (this.isSaler) {
+        url += "/api/saler/signup";
+      } else {
+        url += "/api/customer/signup";
+        formData.append("self_pics", this.currentFile);
+      }
+      axios
+        .post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          confirm("Sign up successfully!");
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+  },
+  computed: {
+    signInData() {
+      let foo = this.signUpData;
+      delete foo["phone_number"];
+      return foo;
+    },
+  },
 };
 </script>

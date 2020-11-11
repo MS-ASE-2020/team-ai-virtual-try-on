@@ -12,7 +12,7 @@
               hide-delimiters
             >
               <v-carousel-item>
-                <v-img height="100%" tile :src="productInfo.pics"></v-img>
+                <v-img contain height="100%" tile :src="productInfo.pics"></v-img>
               </v-carousel-item>
               <v-carousel-item>
                 <v-img
