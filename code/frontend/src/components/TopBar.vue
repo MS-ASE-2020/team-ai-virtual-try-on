@@ -15,20 +15,25 @@
       </v-text-field>
     </v-sheet>
     <v-spacer></v-spacer>
-    <v-icon @click="bar">mdi-account</v-icon>
+    <signinup />
   </v-app-bar>
 </template>
 
 <script>
+import signinup from "@/components/SignInUp";
+
 export default {
   name: "TopBar",
+  components: {
+    signinup,
+  },
   methods: {
     search() {
       window.location.href = "/search" + "?q=" + this.searchInput;
     },
-    bar(){
-      window.location.href = "/customerinfo"
-    }
+    bar() {
+      window.location.href = "/customerinfo";
+    },
   },
 };
 </script>
