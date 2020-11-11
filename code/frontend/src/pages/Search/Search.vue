@@ -37,6 +37,7 @@
       </v-row>
       <v-row justify="center" class="my-12">
         <v-pagination
+          v-if="clothList"
           v-model="page"
           :length="Math.ceil(clothList.length / 12)"
         ></v-pagination

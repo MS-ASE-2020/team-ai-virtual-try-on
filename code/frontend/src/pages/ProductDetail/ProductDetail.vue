@@ -34,13 +34,16 @@
           </v-row>
 
           <v-row class="py-6">
-            价格<span>{{ productInfo.price }}</span>
+            <strong class="red--text">
+              ￥ <span style="font-size: 30px"> {{ productInfo.price }} </span>
+            </strong>
           </v-row>
 
           <v-row align="center">
-            <div>TryOn 评分</div>
+            <div> <strong> TryOn 评分 </strong> </div>
             <v-rating
               v-model="rating"
+              class="mx-4"
               background-color="orange lighten-3"
               color="orange"
               length="5"
@@ -88,7 +91,7 @@ export default {
   data: () => ({
     picPos: 0,
     productInfo: null,
-    rating: 4
+    rating: 4,
   }),
   async beforeCreate() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -104,7 +107,7 @@ export default {
         data.number_people_scoring_two,
         data.number_people_scoring_one,
       ];
-      this.productInfo = data
+      this.productInfo = data;
     } catch (error) {
       console.error(error);
     }

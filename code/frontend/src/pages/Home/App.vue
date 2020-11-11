@@ -4,7 +4,7 @@
       <v-spacer></v-spacer>
 
       <!-- <v-btn icon small color="grey" class="mx-1"> -->
-      <v-icon @click="foo">mdi-account</v-icon>
+      <signinup />
       <!-- </v-btn> -->
     </v-app-bar>
     <v-main>
@@ -15,12 +15,14 @@
 
 <script>
 import homepage from "./HomePage";
+import signinup from "@/components/SignInUp";
 
 export default {
   name: "App",
 
   components: {
     homepage,
+    signinup,
   },
 
   data: () => ({
