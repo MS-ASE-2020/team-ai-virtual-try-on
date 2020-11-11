@@ -16,7 +16,7 @@
               :href="'/productdetail?id=' + item.id"
               max-width="374"
             >
-              <v-img height="300" :src="item.pics">
+              <v-img contain height="300" :src="item.pics">
                 <v-expand-transition>
                   <v-img
                     v-if="hover"
