@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth import authenticate
 
 from .models import MyUser, Product
 
@@ -30,6 +31,17 @@ class CustomerListSerializer(serializers.ModelSerializer):
         model = MyUser
         extra_kwargs = {'password': {'write_only': True}, 'name': {'read_only': True}, 'is_saler': {'read_only': True}}
         fields = ('name', 'phone_number', 'password', 'is_saler', 'self_pics')
+
+
+class CustomerLoginSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        customer = authenticate(name=attrs['name'], password=attrs['password'])
+        if not customer:
+            raise serializers.ValidationError('Customer not exists or password is wrong.')
+        return {'customer': customer}
 
 
 class ProductSerializer(serializers.ModelSerializer):

@@ -3,11 +3,13 @@ import shutil
 
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import login, logout
 from django.db import IntegrityError
 from django.conf import settings
 
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -106,6 +108,40 @@ class CustomerSignupViewSet(viewsets.GenericViewSet):
             return Response('Successful create a new customer', status.HTTP_201_CREATED)
         except Exception as e:
             return Response(str(e), status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class CustomerLoginViewSet(viewsets.GenericViewSet):
+    serializer_class = CustomerLoginSerializer
+    permission_classes = (AllowAny,)
+    http_method_names = ['post']
+
+    def login(self, request):
+        serializer = CustomerLoginSerializer(data=request.data.copy())
+        if serializer.is_valid(raise_exception=True):
+            customer = serializer.validated_data['customer']
+            login(request, customer)
+            response = Response(CustomerListSerializer(customer).data)
+            response.set_cookie('customer_name', customer.name)
+            return response
+        return Response({
+            'status': 'Internal Error',
+            'message': 'Failed to login.'
+        }, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class CustomerLogoutViewSet(APIView):
+    http_method_names = ['get']
+
+    def get(self, request, *args):
+        # print(request.user.is_anonymous)
+        if not request.user.is_anonymous:
+            logout(request)
+            return Response('Logout successfully', status.HTTP_200_OK)
+        else:
+            return Response({
+                'status': 'Bad request',
+                'message': 'Not login yet'
+            }, status.HTTP_400_BAD_REQUEST)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
