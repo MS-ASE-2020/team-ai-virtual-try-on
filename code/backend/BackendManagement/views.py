@@ -16,6 +16,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from BackendManagement.serializers import *
 from BackendManagement.models import *
+from BackendManagement.permissions import IsOwner
 
 
 class SalerViewSet(viewsets.ModelViewSet):
@@ -67,11 +68,18 @@ class SalerSignupViewSet(viewsets.GenericViewSet):
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = MyUser.objects.filter(is_saler=False)
     serializer_class = CustomerListSerializer
+    permission_classes = (IsOwner,)
     http_method_names = ['get', 'put']
 
     def list(self, request):
         queryset = MyUser.objects.filter(is_saler=False)
         serializer = CustomerListSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, *args, **kwargs):
+        print("Retrieving")
+        customer = self.get_object()
+        serializer = self.get_serializer(customer)
         return Response(serializer.data)
 
     def update(self, request, pk=None):
