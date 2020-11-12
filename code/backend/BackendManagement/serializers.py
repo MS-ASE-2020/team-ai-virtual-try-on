@@ -25,7 +25,7 @@ class SalerLoginSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         saler = authenticate(name=attrs['name'], password=attrs['password'])
-        if not saler:
+        if not saler or not saler.is_saler:
             raise serializers.ValidationError(
                 'Saler not exists or password is wrong.')
         return {'saler': saler}
@@ -51,7 +51,7 @@ class CustomerLoginSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         customer = authenticate(name=attrs['name'], password=attrs['password'])
-        if not customer:
+        if not customer or customer.is_saler:
             raise serializers.ValidationError('Customer not exists or password is wrong.')
         return {'customer': customer}
 
