@@ -76,7 +76,11 @@
                           label="Upload a full-body image"
                           filled
                           prepend-icon="mdi-camera"
-                          @change="selectFile"
+                          @change="
+                            (file) => {
+                              currentFile = file;
+                            }
+                          "
                         ></v-file-input>
                       </v-col>
                     </v-col>
@@ -88,6 +92,7 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   v-if="item.showStat"
+                  text
                   color="blue darken-1"
                   @click="signUp"
                 >
@@ -167,9 +172,6 @@ export default {
       } else {
         this.dialog = true;
       }
-    },
-    selectFile(file) {
-      this.currentFile = file;
     },
     signIn() {
       // alert("This feature has not been implemented!");
