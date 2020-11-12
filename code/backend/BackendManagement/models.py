@@ -15,7 +15,7 @@ def product_directory_path(instance, filename):
 class MyUser(AbstractUser):
     username = None
     name = models.CharField('name', max_length=20, primary_key=True)
-    phone_number = models.DecimalField('phone_number', max_digits=11, decimal_places=0, blank=False)
+    phone_number = models.CharField('phone_number', max_length=11, blank=False)
     is_saler = models.BooleanField(default=False)
     self_pics = models.ImageField('self_pics', upload_to=user_directory_path)
     USERNAME_FIELD = 'name'
