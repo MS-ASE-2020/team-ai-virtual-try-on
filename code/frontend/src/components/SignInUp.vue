@@ -1,93 +1,100 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
+  <div>
+    <v-icon @click.stop="clickIcon">mdi-account</v-icon>
+    <v-dialog v-model="dialog" max-width="600px">
+      <!-- <template v-slot:activator="{ on, attrs }">
       <v-icon v-bind="attrs" v-on="on">mdi-account</v-icon>
-    </template>
+    </template> -->
 
-    <v-card>
-      <v-tabs v-model="tab" centered icons-and-text>
-        <v-tabs-slider></v-tabs-slider>
-        <v-tab v-for="item in keyList" :key="item.name">
-          {{ item.name }}
-        </v-tab>
-      </v-tabs>
+      <v-card>
+        <v-tabs v-model="tab" centered icons-and-text>
+          <v-tabs-slider></v-tabs-slider>
+          <v-tab v-for="item in keyList" :key="item.name">
+            {{ item.name }}
+          </v-tab>
+        </v-tabs>
 
-      <v-tabs-items v-model="tab">
-        <v-tab-item v-for="item in keyList" :key="item.name">
-          <v-card flat>
-            <v-card-title>
-              <span class="headline">{{ item.name }}</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-row class="px-3" align="center">
-                      <div class="py-auto" style="font-size: 16px">I'm a</div>
-                      <v-radio-group class="mx-3" v-model="isSaler" row>
-                        <v-radio label="Customer"></v-radio>
-                        <v-radio label="Saler"></v-radio>
-                      </v-radio-group>
-                    </v-row>
-                  </v-col>
-
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                      label="Name*"
-                      hint="Your name should be unique from others"
-                      required
-                      v-model="signUpData.name"
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col v-if="item.showStat" cols="12" md="6">
-                    <v-text-field
-                      label="Phone number*"
-                      hint="Any number string with length of 11"
-                      v-model="signUpData.phone_number"
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12">
-                    <v-text-field
-                      label="Password*"
-                      type="password"
-                      required
-                      v-model="signUpData.password"
-                    ></v-text-field>
-
-                    <v-col v-if="item.showStat && !isSaler" cols="12">
-                      <v-file-input
-                        accept="image/*"
-                        show-size
-                        label="Upload a full-body image"
-                        filled
-                        prepend-icon="mdi-camera"
-                        @change="selectFile"
-                      ></v-file-input>
+        <v-tabs-items v-model="tab">
+          <v-tab-item v-for="item in keyList" :key="item.name">
+            <v-card flat>
+              <v-card-title>
+                <span class="headline">{{ item.name }}</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-row class="px-3" align="center">
+                        <div class="py-auto" style="font-size: 16px">I'm a</div>
+                        <v-radio-group class="mx-3" v-model="isSaler" row>
+                          <v-radio label="Customer"></v-radio>
+                          <v-radio label="Saler"></v-radio>
+                        </v-radio-group>
+                      </v-row>
                     </v-col>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <small>*indicates required field</small>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn v-if="item.showStat" color="blue darken-1" @click="signUp">
-                Sign Up
-              </v-btn>
-              <v-btn v-else color="blue darken-1" text @click="signIn">
-                Sign In
-              </v-btn>
-              <v-btn color="blue darken-1" text @click="dialog = false">
-                Cancel
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-card>
-  </v-dialog>
+
+                    <v-col cols="12" md="6">
+                      <v-text-field
+                        label="Name*"
+                        hint="Your name should be unique from others"
+                        required
+                        v-model="signUpData.name"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col v-if="item.showStat" cols="12" md="6">
+                      <v-text-field
+                        label="Phone number*"
+                        hint="Any number string with length of 11"
+                        v-model="signUpData.phone_number"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12">
+                      <v-text-field
+                        label="Password*"
+                        type="password"
+                        required
+                        v-model="signUpData.password"
+                      ></v-text-field>
+
+                      <v-col v-if="item.showStat && !isSaler" cols="12">
+                        <v-file-input
+                          accept="image/*"
+                          show-size
+                          label="Upload a full-body image"
+                          filled
+                          prepend-icon="mdi-camera"
+                          @change="selectFile"
+                        ></v-file-input>
+                      </v-col>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <small>*indicates required field</small>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  v-if="item.showStat"
+                  color="blue darken-1"
+                  @click="signUp"
+                >
+                  Sign Up
+                </v-btn>
+                <v-btn v-else color="blue darken-1" text @click="signIn">
+                  Sign In
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="dialog = false">
+                  Cancel
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -112,6 +119,9 @@ export default {
     currentFile: null,
   }),
   methods: {
+    clickIcon() {
+      this.dialog = true;
+    },
     selectFile(file) {
       this.currentFile = file;
     },
@@ -123,16 +133,39 @@ export default {
       } else {
         url += "/api/customer/login";
       }
+      axios.defaults.withCredentials = true   ////// TODO !!!!!!
       axios
         .post(url, this.signInData)
         .then((response) => {
           console.log(response);
           confirm("Sign in successfully!");
-          let data = response;
+          let data = response.data;
+
+          ////////////////////
+
+          // axios
+          //   .get(rqt.api + "/api/customers/" + data.name + "/")
+          //   .then((response) => {
+          //     console.log(response);
+          //   })
+          //   .catch((error) => {
+          //     alert(error);
+          //   });
+
+          // axios
+          //   .get(rqt.html + "/")
+          //   .then((response) => {
+          //     console.log(response);
+          //   })
+          //   .catch((error) => {
+          //     alert(error);
+          //   });
+
+          ////////////////
           if (data.is_saler) {
-            window.location.href = "/customerinfo?id=" + data.name;
-          } else {
             window.location.href = "/salerinfo?id=" + data.name;
+          } else {
+            window.location.href = "/customerinfo?id=" + data.name;
           }
         })
         .catch((error) => {

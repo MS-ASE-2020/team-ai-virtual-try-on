@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="userData">
     <v-responsive max-width="1368" class="mx-auto">
       <v-row>
         <v-spacer></v-spacer>
@@ -10,7 +10,7 @@
           </v-row>
 
           <v-row align="center">
-            <p>商家ID：{{ userID }}</p>
+            <p>商家ID：{{ userData.name }}</p>
           </v-row>
         </v-col>
 
@@ -20,6 +20,7 @@
               <v-hover v-slot="{ hover }">
                 <v-card>
                   <v-img
+                    contain
                     height="300"
                     src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
                   >
@@ -44,12 +45,29 @@
 </template>
 
 <script>
+import axios from "axios";
+import rqt from "@/variables.js";
+
 export default {
   name: "CustomerInfo",
   data: () => ({
     model: null,
     userID: "testtesttest",
+    userData: null,
   }),
+  async beforeCreate() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get("id");
+    try {
+      const response = await axios.get(
+        rqt.api + "/api/saler/" + name + "/"
+      );
+      this.userData = response.data;
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };
 </script>
 
