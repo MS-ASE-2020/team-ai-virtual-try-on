@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.documentation import include_docs_urls
@@ -24,3 +24,8 @@ urlpatterns = [
     path('docs/', include_docs_urls(title='API Docs', authentication_classes=[], permission_classes=[])),
     path('api/', include('BackendManagement.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+from revproxy.views import ProxyView
+urlpatterns += [
+    re_path(r'^(?P<path>.*)$', ProxyView.as_view(upstream='http://10.172.151.30:8080')),
+]
