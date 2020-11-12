@@ -16,7 +16,9 @@ urlpatterns = [
     url('saler/signup', SalerSignupViewSet.as_view({'post': 'create'})),
     url('customer/signup', CustomerSignupViewSet.as_view({'post': 'create'})),
     url('customer/login', CustomerLoginViewSet.as_view({'post': 'login'})),
-    url('customer/logout', CustomerLogoutViewSet.as_view())
+    url('customer/logout', CustomerLogoutViewSet.as_view()),
+    url('saler/login', SalerLoginViewSet.as_view({'post': 'login'})),
+    url('saler/logout', SalerLogoutViewSet.as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

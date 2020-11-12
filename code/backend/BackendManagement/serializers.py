@@ -19,6 +19,18 @@ class SalerListSerializer(serializers.ModelSerializer):
         fields = ('name', 'phone_number', 'password', 'is_saler')
     
 
+class SalerLoginSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        saler = authenticate(name=attrs['name'], password=attrs['password'])
+        if not saler:
+            raise serializers.ValidationError(
+                'Saler not exists or password is wrong.')
+        return {'saler': saler}
+
+
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser

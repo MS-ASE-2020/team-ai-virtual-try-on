@@ -22,6 +22,7 @@ from BackendManagement.permissions import IsOwner
 class SalerViewSet(viewsets.ModelViewSet):
     queryset = MyUser.objects.filter(is_saler=True)
     serializer_class = SalerListSerializer
+    permission_classes = (IsOwner,)
     http_method_names = ['get', 'put']
 
     def list(self, request):
@@ -63,6 +64,40 @@ class SalerSignupViewSet(viewsets.GenericViewSet):
             return Response('Successful create a new saler', status.HTTP_201_CREATED)
         except Exception as e:
             return Response(str(e), status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class SalerLoginViewSet(viewsets.GenericViewSet):
+    serializer_class = SalerLoginSerializer
+    permission_classes = (AllowAny,)
+    http_method_names = ['post']
+
+    def login(self, request):
+        serializer = SalerLoginSerializer(data=request.data.copy())
+        if serializer.is_valid(raise_exception=True):
+            saler = serializer.validated_data['saler']
+            login(request, saler)
+            response = Response(SalerListSerializer(saler).data)
+            response.set_cookie('saler_name', saler.name)
+            return response
+        return Response({
+            'status': 'Internal Error',
+            'message': 'Failed to login.'
+        }, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class SalerLogoutViewSet(APIView):
+    http_method_names = ['get']
+
+    def get(self, request, *args):
+        # print(request.user.is_anonymous)
+        if not request.user.is_anonymous:
+            logout(request)
+            return Response('Logout successfully', status.HTTP_200_OK)
+        else:
+            return Response({
+                'status': 'Bad request',
+                'message': 'Not login yet'
+            }, status.HTTP_400_BAD_REQUEST)
 
 
 class CustomerViewSet(viewsets.ModelViewSet):

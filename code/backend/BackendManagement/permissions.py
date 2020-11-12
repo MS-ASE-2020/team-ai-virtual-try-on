@@ -7,5 +7,4 @@ class IsOwner(BasePermission):
         elif view.action in ['retrieve', 'update']:
             return True
     def has_object_permission(self, request, view, obj):
-        print(request, obj)
         return request.user and request.user == obj
