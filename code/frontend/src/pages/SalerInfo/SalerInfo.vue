@@ -56,8 +56,9 @@ export default {
     userData: null,
   }),
   async beforeCreate() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const name = urlParams.get("id");
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const name = urlParams.get("id");
+    const name = sessionStorage.getItem("name")
     try {
       const response = await axios.get(
         rqt.api + "/api/saler/" + name + "/"

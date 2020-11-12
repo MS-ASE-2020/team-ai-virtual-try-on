@@ -1,11 +1,22 @@
 <template>
   <div>
-    <v-icon @click.stop="clickIcon">mdi-account</v-icon>
-    <v-dialog v-model="dialog" max-width="600px">
-      <!-- <template v-slot:activator="{ on, attrs }">
-      <v-icon v-bind="attrs" v-on="on">mdi-account</v-icon>
-    </template> -->
+    <v-menu open-on-hover offset-y>
+      <template v-slot:activator="{ on, attrs }">
+        <v-icon v-bind="attrs" v-on="on" @click.stop="clickIcon"
+          >mdi-account</v-icon
+        >
+      </template>
 
+      <v-list dense v-if="userName">
+        <v-list-item-group>
+          <v-list-item>
+            <v-list-item-title @click="signOut">Sign out</v-list-item-title>
+          </v-list-item></v-list-item-group
+        >
+      </v-list>
+    </v-menu>
+
+    <v-dialog v-model="dialog" max-width="600px">
       <v-card>
         <v-tabs v-model="tab" centered icons-and-text>
           <v-tabs-slider></v-tabs-slider>
@@ -117,10 +128,37 @@ export default {
     dialog: false,
     tab: null,
     currentFile: null,
+    userName: null,
   }),
+  created() {
+    // function getCookieName(k) {
+    //   return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
+    // }
+    this.userName = sessionStorage.getItem("name");
+  },
   methods: {
+    signOut() {
+      try {
+        if (sessionStorage.getItem("isSaler") === "n") {
+          axios.get(rqt.api + "/api/customer/logout")
+        } else if (this.sName) {
+          axios.get(rqt.api + "/api/saler/logout");
+        }
+      } catch (error) {
+        alert(error);
+        return;
+      }
+      sessionStorage.clear();
+      window.location.href = "/";
+    },
     clickIcon() {
-      this.dialog = true;
+      if (this.cName) {
+        window.location.href = "/customerinfo?id=" + this.cName;
+      } else if (this.sName) {
+        window.location.href = "/salerinfo?id=" + this.sName;
+      } else {
+        this.dialog = true;
+      }
     },
     selectFile(file) {
       this.currentFile = file;
@@ -133,7 +171,6 @@ export default {
       } else {
         url += "/api/customer/login";
       }
-      axios.defaults.withCredentials = true   ////// TODO !!!!!!
       axios
         .post(url, this.signInData)
         .then((response) => {
@@ -162,10 +199,13 @@ export default {
           //   });
 
           ////////////////
+          sessionStorage.setItem("name", data.name);
           if (data.is_saler) {
-            window.location.href = "/salerinfo?id=" + data.name;
+            sessionStorage.setItem("isSaler", "y");
+            window.location.href = "/salerinfo";
           } else {
-            window.location.href = "/customerinfo?id=" + data.name;
+            sessionStorage.setItem("isSaler", "n");
+            window.location.href = "/customerinfo";
           }
         })
         .catch((error) => {
