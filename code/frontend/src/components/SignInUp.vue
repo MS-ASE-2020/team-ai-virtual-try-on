@@ -134,30 +134,35 @@ export default {
     // function getCookieName(k) {
     //   return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
     // }
-    this.userName = sessionStorage.getItem("name");
+    this.userName = localStorage.getItem("name");
+    console.log(this.userName);
   },
   methods: {
     signOut() {
       try {
-        if (sessionStorage.getItem("isSaler") === "n") {
+        let id = localStorage.getItem("isSaler");
+        if (id === "n") {
           axios.get(rqt.api + "/api/customer/logout");
-        } else if (this.sName) {
+        } else if (id === "y") {
           axios.get(rqt.api + "/api/saler/logout");
         }
       } catch (error) {
+        console.log(error);
         alert(error);
         return;
       }
-      sessionStorage.clear();
+      localStorage.clear();
       window.location.href = "/";
     },
     clickIcon() {
-      let id = sessionStorage.getItem("isSaler");
-      if (this.userName) {
+      let id = localStorage.getItem("isSaler");
+      let name = localStorage.getItem("name");
+
+      if (name) {
         if (id === "n") {
-          window.location.href = "/customerinfo?id=" + this.cName;
+          window.location.href = "/customerinfo";
         } else {
-          window.location.href = "/salerinfo?id=" + this.sName;
+          window.location.href = "/salerinfo";
         }
       } else {
         this.dialog = true;
@@ -181,33 +186,12 @@ export default {
           confirm("Sign in successfully!");
           let data = response.data;
 
-          ////////////////////
-
-          // axios
-          //   .get(rqt.api + "/api/customers/" + data.name + "/")
-          //   .then((response) => {
-          //     console.log(response);
-          //   })
-          //   .catch((error) => {
-          //     alert(error);
-          //   });
-
-          // axios
-          //   .get(rqt.html + "/")
-          //   .then((response) => {
-          //     console.log(response);
-          //   })
-          //   .catch((error) => {
-          //     alert(error);
-          //   });
-
-          ////////////////
-          sessionStorage.setItem("name", data.name);
-          if (data.is_saler) {
-            sessionStorage.setItem("isSaler", "y");
+          localStorage.setItem("name", data.name);
+          if (this.isSaler) {
+            localStorage.setItem("isSaler", "y");
             window.location.href = "/salerinfo";
           } else {
-            sessionStorage.setItem("isSaler", "n");
+            localStorage.setItem("isSaler", "n");
             window.location.href = "/customerinfo";
           }
         })

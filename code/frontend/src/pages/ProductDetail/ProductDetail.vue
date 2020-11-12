@@ -97,7 +97,7 @@ export default {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
     try {
-      const response = await axios.get(rqt.api + "/api/products/" + id);
+      const response = await axios.get(rqt.api + "/api/products/" + id + "/");
       console.log(response);
       let data = response.data;
       data.rateList = [

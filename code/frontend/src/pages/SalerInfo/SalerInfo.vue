@@ -58,10 +58,10 @@ export default {
   async beforeCreate() {
     // const urlParams = new URLSearchParams(window.location.search);
     // const name = urlParams.get("id");
-    const name = sessionStorage.getItem("name")
+    const name = localStorage.getItem("name")
     try {
       const response = await axios.get(
-        rqt.api + "/api/saler/" + name + "/"
+        rqt.api + "/api/salers/" + name + "/"
       );
       this.userData = response.data;
       console.log(response);
