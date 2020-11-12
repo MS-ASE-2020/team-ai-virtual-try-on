@@ -112,7 +112,6 @@ class CustomerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def retrieve(self, request, *args, **kwargs):
-        print("Retrieving")
         customer = self.get_object()
         serializer = self.get_serializer(customer)
         return Response(serializer.data)
