@@ -140,7 +140,7 @@ export default {
     signOut() {
       try {
         if (sessionStorage.getItem("isSaler") === "n") {
-          axios.get(rqt.api + "/api/customer/logout")
+          axios.get(rqt.api + "/api/customer/logout");
         } else if (this.sName) {
           axios.get(rqt.api + "/api/saler/logout");
         }
@@ -152,10 +152,13 @@ export default {
       window.location.href = "/";
     },
     clickIcon() {
-      if (this.cName) {
-        window.location.href = "/customerinfo?id=" + this.cName;
-      } else if (this.sName) {
-        window.location.href = "/salerinfo?id=" + this.sName;
+      let id = sessionStorage.getItem("isSaler");
+      if (this.userName) {
+        if (id === "n") {
+          window.location.href = "/customerinfo?id=" + this.cName;
+        } else {
+          window.location.href = "/salerinfo?id=" + this.sName;
+        }
       } else {
         this.dialog = true;
       }
