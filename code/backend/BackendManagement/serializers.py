@@ -73,3 +73,10 @@ class ProductSerializer(serializers.ModelSerializer):
             'owned_saler',
             'pics'
         )
+
+
+class TryonSerializer(serializers.Serializer):
+    url = serializers.CharField()
+
+    class Meta:
+        fields = ('url')

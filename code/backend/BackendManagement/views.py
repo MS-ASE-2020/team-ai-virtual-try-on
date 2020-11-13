@@ -206,3 +206,12 @@ class ProductViewSet(viewsets.ModelViewSet):
             'status': 'Success',
             'message': 'Delete the Product Successfully'
         }, status=status.HTTP_200_OK)
+
+
+class TryonViewSet(APIView):
+    def get(self, request, *args):
+        print(request.query_params)
+        path = "/media/tryon/{}_{}.jpg".format(request.query_params.get('customer_name'), request.query_params.get('product_id'))
+        data = [{"url": path}]
+        serializer = TryonSerializer(data, many=True).data
+        return Response(serializer, status=status.HTTP_200_OK)
