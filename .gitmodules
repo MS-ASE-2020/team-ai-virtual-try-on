@@ -1,0 +1,3 @@
+[submodule "code/backend/TryonModel"]
+	path = code/backend/TryonModel
+	url = git@github.com:XinYuan-believe/TryonModel.git
