@@ -226,8 +226,11 @@ class TryonViewSet(APIView):
         # test = "python test.py --name deepfashion --dataset_mode deepfashion --dataroot ../media --gpu_ids 0 --nThreads 0 --batchSize 1 --use_attention --PONO --PONO_C --save_per_img --warp_bilinear --no_flip --warp_patch --video_like --adaptor_kernel 4"
         # image = os.system(test)
         # os.chdir(os_dir)
-        
-        image = tryon()
+        customer_name = "customer_0000/"
+        customer_image_id = "1"
+        product_name = "product_0000/"
+        product_image_id = "1"
+        image = tryon(customer_image_id, product_image_id, customer_name, product_name)
 
         # path = "/media/tryon/{}_{}.jpg".format(request.query_params.get('customer_name'), request.query_params.get('product_id'))
         # image.save(path)
