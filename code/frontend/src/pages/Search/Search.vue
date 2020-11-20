@@ -3,7 +3,7 @@
     <v-responsive max-width="1368" class="mx-auto">
       <v-row>
         <v-col
-          v-for="item in clothList"
+          v-for="(item, i) in clothList"
           :key="item.id"
           cols="12"
           sm="6"
@@ -15,6 +15,7 @@
               class="mx-auto"
               :href="'/productdetail?id=' + item.id"
               max-width="374"
+              @mouseenter="getSynImage(i)"
             >
               <v-img contain height="300" :src="item.pics">
                 <v-expand-transition>
@@ -22,7 +23,7 @@
                     v-if="hover"
                     class="d-flex transition-fast-in-fast-out v-card--reveal display-3"
                     style="height: 100%"
-                    src="https://cdn.vuetifyjs.com/images/cards/kitchen.png"
+                    :src=" clothList[i].synImage ? clothList[i].synImage : testImg"
                   >
                   </v-img>
                 </v-expand-transition>
@@ -55,6 +56,7 @@ export default {
   data: () => ({
     page: 1,
     clothList: null,
+    testImg: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
   }),
   async beforeCreate() {
     // const urlParams = new URLSearchParams(window.location.search)
@@ -66,6 +68,35 @@ export default {
     } catch (error) {
       console.error(error);
     }
+  },
+
+  methods: {
+    getSynImage(i) {
+      const name = localStorage.getItem("name");
+      const id = localStorage.getItem("isSaler");
+
+      if (!name || id === "y" || this.clothList[i].synImage) {
+        return;
+      }
+      const url =
+        rqt.api +
+        "/api/tryon?" +
+        "customer_name=" +
+        name +
+        "&product_id=" +
+        this.clothList[i].id; 
+      axios
+        .get(url)
+        .then((response) =>{
+          const data = response.data
+          console.log(data[0].url)
+          this.clothList[i].synImage = rqt.api + "/media/tryon/0000_9cde8835-9079-4863-9008-a5c03be69a4f.jpg" // TODO
+          // this.clothList[i].synImage = data[0].url
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+    },
   },
 };
 </script>

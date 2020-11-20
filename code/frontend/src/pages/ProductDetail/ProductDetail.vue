@@ -12,13 +12,18 @@
               hide-delimiters
             >
               <v-carousel-item>
-                <v-img contain height="100%" tile :src="productInfo.pics"></v-img>
+                <v-img
+                  contain
+                  height="100%"
+                  tile
+                  :src="productInfo.pics"
+                ></v-img>
               </v-carousel-item>
               <v-carousel-item>
                 <v-img
                   height="100%"
                   tile
-                  src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+                  :src="synImage ? synImage : testImg"
                 ></v-img>
               </v-carousel-item>
             </v-carousel>
@@ -40,7 +45,7 @@
           </v-row>
 
           <v-row align="center">
-            <div> <strong> TryOn 评分 </strong> </div>
+            <div><strong> TryOn 评分 </strong></div>
             <v-rating
               v-model="rating"
               class="mx-4"
@@ -92,6 +97,8 @@ export default {
     picPos: 0,
     productInfo: null,
     rating: 4,
+    synImage: null,
+    testImg: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
   }),
   async beforeCreate() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -110,6 +117,22 @@ export default {
       this.productInfo = data;
     } catch (error) {
       console.error(error);
+    }
+
+    const name = localStorage.getItem("name");
+    const userid = localStorage.getItem("isSaler");
+
+    if (!name || userid === "y") {
+      return;
+    }
+    const url =
+      rqt.api + "/api/tryon?" + "customer_name=" + name + "&product_id=" + id + "/";
+    try {
+      const response = await axios.get(url);
+      const data = response.data;
+      this.synImage = data.url; // TODO
+    } catch (error) {
+      console.log(error);
     }
   },
 };

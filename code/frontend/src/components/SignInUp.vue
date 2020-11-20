@@ -173,6 +173,9 @@ export default {
         this.dialog = true;
       }
     },
+    getCookieName(k) {
+      return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
+    },
     signIn() {
       // alert("This feature has not been implemented!");
       let url = rqt.api;
@@ -182,7 +185,11 @@ export default {
         url += "/api/customer/login";
       }
       axios
-        .post(url, this.signInData)
+        .post(url, this.signInData, {
+          headers: {
+            "X-CSRFToken": this.getCookieName("csrftoken"),
+          },
+        })
         .then((response) => {
           console.log(response);
           confirm("Sign in successfully!");
