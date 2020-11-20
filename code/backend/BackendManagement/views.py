@@ -18,7 +18,7 @@ from BackendManagement.serializers import *
 from BackendManagement.models import *
 from BackendManagement.permissions import IsOwner
 
-from model.test import tryon
+from TryonModel.test import tryon
 
 
 class SalerViewSet(viewsets.ModelViewSet):
@@ -216,7 +216,7 @@ class TryonViewSet(APIView):
         customer_image_dir = os.path.join(settings.MEDIA_ROOT, "customers", "customer_" + request.query_params.get("customer_name"))
         customer_image_path = os.path.join(customer_image_dir, os.listdir(customer_image_dir)[0])
 
-        product_image_dir = os.path.join(settings.MEDIA_ROOT, "products", request.query_params.get("customer_name"))
+        product_image_dir = os.path.join(settings.MEDIA_ROOT, "products", request.query_params.get("product_name"))
         product_image_path = os.path.join(product_image_dir, os.listdir(product_image_dir)[0])
 
         # import os
@@ -226,8 +226,11 @@ class TryonViewSet(APIView):
         # test = "python test.py --name deepfashion --dataset_mode deepfashion --dataroot ../media --gpu_ids 0 --nThreads 0 --batchSize 1 --use_attention --PONO --PONO_C --save_per_img --warp_bilinear --no_flip --warp_patch --video_like --adaptor_kernel 4"
         # image = os.system(test)
         # os.chdir(os_dir)
-        
-        # image = test(customer_image_path, product_image_path)
+        customer_name = "customer_" + request.query_params.get("customer_name")
+        customer_image_id = "1"
+        product_name = "products", request.query_params.get("product_name")
+        product_image_id = "1"
+        image = tryon(customer_image_id, product_image_id, customer_name, product_name)
 
         # path = "/media/tryon/{}_{}.jpg".format(request.query_params.get('customer_name'), request.query_params.get('product_id'))
         # image.save(path)
