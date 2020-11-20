@@ -4,8 +4,8 @@ import uuid
 
 def user_directory_path(instance, filename):
     if instance.is_saler:
-        return 'salers/saler_{}/{}'.format(instance.name, filename)
-    return 'customers/customer_{}/{}'.format(instance.name, filename)
+        return 'salers/saler_{}/img/{}'.format(instance.name, filename)
+    return 'customers/customer_{}/img/{}'.format(instance.name, filename)
 
 
 def product_directory_path(instance, filename):
