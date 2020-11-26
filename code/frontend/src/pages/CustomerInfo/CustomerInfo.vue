@@ -116,9 +116,6 @@ export default {
     }
   },
   methods: {
-    getCookieName(k) {
-      return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
-    },
     updateProfile() {
       const formData = new FormData();
       console.log(this.currentFile);
@@ -134,7 +131,7 @@ export default {
         .put("/api/customers/" + this.userData.name + "/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            "X-CSRFToken": this.getCookieName("csrftoken"),
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
           },
         })
         .then((response) => {

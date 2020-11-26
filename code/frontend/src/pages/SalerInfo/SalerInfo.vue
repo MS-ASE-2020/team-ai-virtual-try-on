@@ -125,10 +125,6 @@ export default {
     }
   },
   methods: {
-    foo() {},
-    getCookieName(k) {
-      return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
-    },
     updateProfile() {
       const formData = new FormData();
       if (this.userData["password"]) {
@@ -140,7 +136,7 @@ export default {
         .put("/api/salers/" + this.userData.name + "/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            "X-CSRFToken": this.getCookieName("csrftoken"),
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
           },
         })
         .then((response) => {
