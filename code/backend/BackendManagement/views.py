@@ -125,10 +125,10 @@ class CustomerViewSet(viewsets.ModelViewSet):
         data['phone_number'] = data['phone_number'] if data.get('phone_number') else customer.phone_number
         data['self_pics'] = data['self_pics'] if data.get('self_pics') else customer.self_pics
         if data.get('self_pics'):
-            pics_path = os.path.join(settings.MEDIA_ROOT, 'customers', 'customer_' + str(customer))
+            pics_path = os.path.join(settings.MEDIA_ROOT, 'customers', 'customer_' + str(customer), 'img')
             previous_pics = os.listdir(pics_path)
             for previous_pic in previous_pics:
-                if os.path.join('customers', 'customer_' + str(customer), previous_pic) != data['self_pics']:
+                if os.path.join('customers', 'customer_' + str(customer), 'img', previous_pic) != data['self_pics']:
                     os.remove(os.path.join(pics_path, previous_pic))
         serializer = CustomerListSerializer(customer, data=data)
         if serializer.is_valid():
