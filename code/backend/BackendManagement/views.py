@@ -18,7 +18,7 @@ from BackendManagement.serializers import *
 from BackendManagement.models import *
 from BackendManagement.permissions import IsOwner
 
-from TryonModel.test import tryon
+from TryonModel.test import tryon,ModelInit
 
 
 class SalerViewSet(viewsets.ModelViewSet):
@@ -125,10 +125,10 @@ class CustomerViewSet(viewsets.ModelViewSet):
         data['phone_number'] = data['phone_number'] if data.get('phone_number') else customer.phone_number
         data['self_pics'] = data['self_pics'] if data.get('self_pics') else customer.self_pics
         if data.get('self_pics'):
-            pics_path = os.path.join(settings.MEDIA_ROOT, 'customers', 'customer_' + str(customer))
+            pics_path = os.path.join(settings.MEDIA_ROOT, 'customers', 'customer_' + str(customer), 'img')
             previous_pics = os.listdir(pics_path)
             for previous_pic in previous_pics:
-                if os.path.join('customers', 'customer_' + str(customer), previous_pic) != data['self_pics']:
+                if os.path.join('customers', 'customer_' + str(customer), 'img', previous_pic) != data['self_pics']:
                     os.remove(os.path.join(pics_path, previous_pic))
         serializer = CustomerListSerializer(customer, data=data)
         if serializer.is_valid():
@@ -221,6 +221,7 @@ class TryonViewSet(APIView):
         customer_image_id = os.listdir(customer_image_dir)[0]
         product_name = "products", request.query_params.get("product_name")
         product_image_id = os.listdir(product_image_dir)[0]
+        # ModelInit()
         image = tryon(customer_image_id, product_image_id, customer_name, product_name)
 
         image.save(os.path.join(settings.MEDIA_ROOT, "tryon", "{}_{}.jpg".format(request.query_params.get("customer_name"), request.query_params.get("product_name"))))
