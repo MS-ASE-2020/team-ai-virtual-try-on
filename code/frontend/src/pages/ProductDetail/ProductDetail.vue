@@ -88,7 +88,6 @@
 </template>
 
 <script>
-import rqt from "@/variables.js";
 import axios from "axios";
 
 export default {
@@ -104,7 +103,7 @@ export default {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
     try {
-      const response = await axios.get(rqt.api + "/api/products/" + id + "/");
+      const response = await axios.get("/api/products/" + id + "/");
       console.log(response);
       let data = response.data;
       data.rateList = [
@@ -126,7 +125,12 @@ export default {
       return;
     }
     const url =
-      rqt.api + "/api/tryon?" + "customer_name=" + name + "&product_id=" + id + "/";
+      "/api/tryon?" +
+      "customer_name=" +
+      name +
+      "&product_id=" +
+      id +
+      "/";
     try {
       const response = await axios.get(url);
       const data = response.data;

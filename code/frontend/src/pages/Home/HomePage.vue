@@ -35,8 +35,7 @@
 </template>
 
 <script>
-import rqt from '@/variables.js'
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   name: "HomePage",
@@ -49,13 +48,13 @@ export default {
     },
     lucky() {
       axios
-        .get(rqt.api+"/api/products/")
+        .get("/api/products/")
         .then((response) => {
-          console.log(response)
-          window.location.href = "/productdetail?id=" + response.data[0].id
+          console.log(response);
+          window.location.href = "/productdetail?id=" + response.data[0].id;
         })
         .catch((error) => {
-          alert(error)
+          alert(error);
         });
     },
   },

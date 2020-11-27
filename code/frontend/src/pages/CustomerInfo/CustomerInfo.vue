@@ -85,7 +85,6 @@
 
 <script>
 import axios from "axios";
-import rqt from "@/variables.js";
 
 export default {
   name: "CustomerInfo",
@@ -106,9 +105,7 @@ export default {
     // const name = urlParams.get("id");
     const name = localStorage.getItem("name");
     try {
-      const response = await axios.get(
-        rqt.api + "/api/customers/" + name + "/"
-      );
+      const response = await axios.get("/api/customers/" + name + "/");
       this.userData = response.data;
       console.log(response);
     } catch (error) {

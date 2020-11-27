@@ -25,7 +25,7 @@ export default {
 
         localStorage.setItem("name", data.name);
         localStorage.setItem("csrftoken", this.getCookieName("csrftoken"))
-        if (this.isSaler) {
+        if (isSaler) {
           localStorage.setItem("isSaler", "y");
           window.location.href = "/salerinfo";
         } else {
@@ -57,7 +57,7 @@ export default {
     const formData = new FormData();
 
     Object.keys(signUpData).forEach((key) =>
-      formData.append(key, this.signUpData[key])
+      formData.append(key, signUpData[key])
     );
     let url = "";
     if (isSaler) {
