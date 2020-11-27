@@ -18,7 +18,7 @@ from BackendManagement.serializers import *
 from BackendManagement.models import *
 from BackendManagement.permissions import IsOwner
 
-from TryonModel.test import tryon
+from TryonModel.test import tryon,ModelInit
 
 
 class SalerViewSet(viewsets.ModelViewSet):
@@ -221,6 +221,7 @@ class TryonViewSet(APIView):
         customer_image_id = os.listdir(customer_image_dir)[0]
         product_name = "products", request.query_params.get("product_name")
         product_image_id = os.listdir(product_image_dir)[0]
+        # ModelInit()
         image = tryon(customer_image_id, product_image_id, customer_name, product_name)
 
         image.save(os.path.join(settings.MEDIA_ROOT, "tryon", "{}_{}.jpg".format(request.query_params.get("customer_name"), request.query_params.get("product_name"))))
