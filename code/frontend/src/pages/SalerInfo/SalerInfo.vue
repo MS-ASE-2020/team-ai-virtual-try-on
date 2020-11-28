@@ -101,7 +101,6 @@
 
 <script>
 import axios from "axios";
-import rqt from "@/variables.js";
 
 export default {
   name: "CustomerInfo",
@@ -117,7 +116,7 @@ export default {
     // const name = urlParams.get("id");
     const name = localStorage.getItem("name");
     try {
-      const response = await axios.get(rqt.api + "/api/salers/" + name + "/");
+      const response = await axios.get("/api/salers/" + name + "/");
       this.userData = response.data;
       console.log(response);
     } catch (error) {
@@ -125,10 +124,6 @@ export default {
     }
   },
   methods: {
-    foo() {},
-    getCookieName(k) {
-      return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
-    },
     updateProfile() {
       const formData = new FormData();
       if (this.userData["password"]) {
@@ -140,7 +135,7 @@ export default {
         .put("/api/salers/" + this.userData.name + "/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            "X-CSRFToken": this.getCookieName("csrftoken"),
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
           },
         })
         .then((response) => {
