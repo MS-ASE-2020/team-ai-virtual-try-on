@@ -5,3 +5,4 @@ code/backend/pics/
 code/backend/media/
 env/
 code/backend/model
+*.pyc
