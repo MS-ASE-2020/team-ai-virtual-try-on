@@ -30,10 +30,15 @@
                   </v-img>
                 </v-expand-transition>
               </v-img>
-              <v-card-text>
+              <v-card-title style="font-size: 15px">
                 <!-- Bershka 女士 2020新款简约V领短款气质针织开衫 -->
                 {{ item.name }}
-              </v-card-text>
+              </v-card-title>
+              <v-card-subtitle>
+                <strong class="red--text">
+                  ￥ <span style="font-size: 15px"> {{ item.price }} </span>
+                </strong>
+              </v-card-subtitle>
             </v-card>
           </v-hover>
         </v-col>

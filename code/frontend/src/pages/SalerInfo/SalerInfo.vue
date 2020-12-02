@@ -59,7 +59,7 @@
         <v-col cols="12" md="8">
           <v-row class="mt-md-16 mb-5">
             <v-col
-              v-for="item in productList"
+              v-for="(item, i) in productList"
               :key="item.id"
               cols="6"
               sm="4"
@@ -71,9 +71,31 @@
                   <v-img contain height="300" :src="item.pics"> </v-img>
                   <v-expand-transition>
                     <v-sheet v-if="hover" tile>
-                      <v-card-text>
+                      <v-card-title style="font-size: 15px">
+                        <!-- Bershka 女士 2020新款简约V领短款气质针织开衫 -->
                         {{ item.name }}
-                      </v-card-text>
+                      </v-card-title>
+                      <v-card-subtitle class="py-0">
+                        <strong class="red--text">
+                          ￥
+                          <span style="font-size: 15px">
+                            {{ item.price }}
+                          </span>
+                        </strong>
+                      </v-card-subtitle>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn icon>
+                          <v-icon @click="modifyDialog = true">
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
+                        <v-btn icon>
+                          <v-icon @click="deleteProduct(i)">
+                            mdi-trash-can-outline
+                          </v-icon>
+                        </v-btn>
+                      </v-card-actions>
                     </v-sheet>
                   </v-expand-transition>
                 </v-card>
@@ -81,7 +103,7 @@
             </v-col>
             <v-col cols="6" sm="4" md="6" lg="4">
               <v-hover v-slot="{ hover }">
-                <v-card height="300" @click="dialog = true">
+                <v-card height="300" @click="createDialog = true">
                   <v-row class="fill-height" align="center" justify="center">
                     <v-scale-transition>
                       <v-icon class="mx-auto my-auto" :size="hover ? 100 : 50">
@@ -98,7 +120,7 @@
         <v-spacer></v-spacer>
       </v-row>
     </v-responsive>
-    <create-product v-model="dialog"></create-product>
+    <create-product v-model="createDialog"></create-product>
   </v-container>
 </template>
 
@@ -112,7 +134,8 @@ export default {
     CreateProduct,
   },
   data: () => ({
-    dialog: false,
+    createDialog: false,
+    modifyDialog: false,
     userData: null,
     productList: [],
     tableStat: {
@@ -161,6 +184,21 @@ export default {
           console.log(response);
           confirm("Update profiles successfully!");
           window.location.reload();
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+    deleteProduct(idx) {
+      axios
+        .delete("/api/products/" + this.productList[idx].id + "/", {
+          headers: {
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
+          },
+        })
+        .then(() => {
+          confirm("Successfully delete product!");
+          this.productList = this.productList.splice(idx, 1);
         })
         .catch((error) => {
           alert(error);
