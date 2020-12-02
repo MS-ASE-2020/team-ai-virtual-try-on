@@ -86,7 +86,12 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn icon>
-                          <v-icon @click="modifyDialog = true">
+                          <v-icon
+                            @click="
+                              onEditItem = item;
+                              modifyDialog = true;
+                            "
+                          >
                             mdi-pencil
                           </v-icon>
                         </v-btn>
@@ -121,21 +126,25 @@
       </v-row>
     </v-responsive>
     <create-product v-model="createDialog"></create-product>
+    <modify-product v-model="modifyDialog" :item="onEditItem"></modify-product>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
 import CreateProduct from "./CreateProduct";
+import ModifyProduct from "./ModifyProduct";
 
 export default {
   name: "SalerInfo",
   components: {
     CreateProduct,
+    ModifyProduct,
   },
   data: () => ({
     createDialog: false,
     modifyDialog: false,
+    onEditItem: null,
     userData: null,
     productList: [],
     tableStat: {
