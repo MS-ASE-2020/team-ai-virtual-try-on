@@ -38,9 +38,9 @@ module.exports = {
     "vuetify"
   ],
   configureWebpack: {
-    externals: {
-      "vue": 'Vue',
-    },
+    // externals: {
+    //   "vue": 'Vue',
+    // },
     // plugins: [
     //   new CompressionPlugin({
     //     algorithm: 'gzip',

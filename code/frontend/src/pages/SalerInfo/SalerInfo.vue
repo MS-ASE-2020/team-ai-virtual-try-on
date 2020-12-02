@@ -58,19 +58,21 @@
 
         <v-col cols="12" md="8">
           <v-row class="mt-md-16 mb-5">
-            <v-col v-for="i in 5" :key="i" cols="6" sm="4" md="6" lg="4">
+            <v-col
+              v-for="item in productList"
+              :key="item.id"
+              cols="6"
+              sm="4"
+              md="6"
+              lg="4"
+            >
               <v-hover v-slot="{ hover }">
                 <v-card>
-                  <v-img
-                    contain
-                    height="300"
-                    src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-                  >
-                  </v-img>
+                  <v-img contain height="300" :src="item.pics"> </v-img>
                   <v-expand-transition>
                     <v-sheet v-if="hover" tile>
                       <v-card-text>
-                        Bershka 女士 2020新款简约V领短款气质针织开衫
+                        {{ item.name }}
                       </v-card-text>
                     </v-sheet>
                   </v-expand-transition>
@@ -79,7 +81,7 @@
             </v-col>
             <v-col cols="6" sm="4" md="6" lg="4">
               <v-hover v-slot="{ hover }">
-                <v-card height="300" @click="foo">
+                <v-card height="300" @click="dialog = true">
                   <v-row class="fill-height" align="center" justify="center">
                     <v-scale-transition>
                       <v-icon class="mx-auto my-auto" :size="hover ? 100 : 50">
@@ -96,24 +98,29 @@
         <v-spacer></v-spacer>
       </v-row>
     </v-responsive>
+    <create-product v-model="dialog"></create-product>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
+import CreateProduct from "./CreateProduct";
 
 export default {
-  name: "CustomerInfo",
+  name: "SalerInfo",
+  components: {
+    CreateProduct,
+  },
   data: () => ({
+    dialog: false,
     userData: null,
+    productList: [],
     tableStat: {
       phone_number: false,
       password: false,
     },
   }),
   async beforeCreate() {
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const name = urlParams.get("id");
     const name = localStorage.getItem("name");
     try {
       const response = await axios.get("/api/salers/" + name + "/");
@@ -121,6 +128,18 @@ export default {
       console.log(response);
     } catch (error) {
       console.error(error);
+    }
+
+    try {
+      const allProduct = await axios.get("/api/products/");
+      allProduct.data.forEach((item) => {
+        if (item.owned_saler === this.userData.name) {
+          this.productList.push(item);
+        }
+      });
+      console.log(this.productList);
+    } catch (error) {
+      console.log(error);
     }
   },
   methods: {
