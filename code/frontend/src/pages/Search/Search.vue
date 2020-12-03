@@ -1,9 +1,12 @@
 <template>
   <v-container>
     <v-responsive max-width="1368" class="mx-auto">
-      <v-row>
+      <v-row v-if="clothList">
         <v-col
-          v-for="(item, i) in clothList"
+          v-for="(item, i) in clothList.slice(
+            (page - 1) * 12,
+            Math.min(page * 12, clothList.length)
+          )"
           :key="item.id"
           cols="12"
           sm="6"
@@ -17,15 +20,20 @@
               max-width="374"
               @mouseenter="getSynImage(i)"
             >
-              <v-img contain height="300" :src="item.pics">
+              <v-img contain max-height="350" :src="item.pics">
                 <v-expand-transition>
+                  <v-progress-circular
+                    v-if="hover && sendRQT[item.id] && !clothList[i].synImage"
+                    :size="50"
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
                   <v-img
-                    v-if="hover"
+                    v-if="hover && clothList[i].synImage"
                     class="d-flex transition-fast-in-fast-out v-card--reveal display-3"
+                    contain
                     style="height: 100%"
-                    :src="
-                      clothList[i].synImage ? clothList[i].synImage : testImg
-                    "
+                    :src="clothList[i].synImage"
                   >
                   </v-img>
                 </v-expand-transition>
@@ -61,7 +69,8 @@ export default {
   name: "Search",
   data: () => ({
     page: 1,
-    clothList: null,
+    clothList: [],
+    sendRQT: {},
     testImg: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
   }),
   async beforeCreate() {
@@ -70,7 +79,8 @@ export default {
     try {
       const response = await axios.get("/api/products/");
       console.log(response);
-      this.clothList = response.data;
+      this.clothList = Object.assign([], this.clothList, response.data);
+      console.log(this.clothList);
     } catch (error) {
       console.error(error);
     }
@@ -81,14 +91,20 @@ export default {
       const name = localStorage.getItem("name");
       const id = localStorage.getItem("isSaler");
 
-      if (!name || id === "y" || this.clothList[i].synImage) {
+      if (
+        !name ||
+        id === "y" ||
+        this.clothList[i].synImage ||
+        this.sendRQT[this.clothList[i].id]
+      ) {
         return;
       }
+      this.sendRQT[this.clothList[i].id] = true;
       const url =
         "/api/tryon?" +
         "customer_name=" +
         name +
-        "&product_id=" +
+        "&product_name=" +
         this.clothList[i].id;
       axios
         .get(url)

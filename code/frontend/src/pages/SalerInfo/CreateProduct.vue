@@ -97,7 +97,7 @@ export default {
         })
         .then(() => {
           confirm("Create product successfully!");
-          window.location.reload()
+          window.location.reload();
         })
         .catch((error) => {
           console.log(error);
