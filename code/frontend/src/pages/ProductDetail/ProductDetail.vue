@@ -20,8 +20,19 @@
                 ></v-img>
               </v-carousel-item>
               <v-carousel-item>
+                <v-sheet color="transparent" v-if="!synImage" height="100%" tile>
+                  <v-row class="fill-height" align="center" justify="center">
+                    <v-progress-circular
+                      :size="50"
+                      color="primary"
+                      indeterminate
+                    ></v-progress-circular>
+                  </v-row>
+                </v-sheet>
                 <v-img
+                  v-else
                   height="100%"
+                  contain
                   tile
                   :src="synImage ? synImage : testImg"
                 ></v-img>
@@ -130,12 +141,11 @@ export default {
     if (!name || userid === "y") {
       return;
     }
-    const url =
-      "/api/tryon?" + "customer_name=" + name + "&product_id=" + id + "/";
+    const url = "/api/tryon?" + "customer_name=" + name + "&product_name=" + id;
     try {
       const response = await axios.get(url);
       const data = response.data;
-      this.synImage = data.url; // TODO
+      this.synImage = data[0].url;
     } catch (error) {
       console.log(error);
     }

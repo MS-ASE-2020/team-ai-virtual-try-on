@@ -68,7 +68,9 @@
             >
               <v-hover v-slot="{ hover }">
                 <v-card>
-                  <v-img contain height="300" :src="item.pics"> </v-img>
+                  <a :href="'/productdetail?id=' + item.id">
+                    <v-img contain height="300" :src="item.pics"> </v-img>
+                  </a>
                   <v-expand-transition>
                     <v-sheet v-if="hover" tile>
                       <v-card-title style="font-size: 15px">
