@@ -58,20 +58,49 @@
 
         <v-col cols="12" md="8">
           <v-row class="mt-md-16 mb-5">
-            <v-col v-for="i in 5" :key="i" cols="6" sm="4" md="6" lg="4">
+            <v-col
+              v-for="(item, i) in productList"
+              :key="item.id"
+              cols="6"
+              sm="4"
+              md="6"
+              lg="4"
+            >
               <v-hover v-slot="{ hover }">
                 <v-card>
-                  <v-img
-                    contain
-                    height="300"
-                    src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-                  >
-                  </v-img>
+                  <v-img contain height="300" :src="item.pics"> </v-img>
                   <v-expand-transition>
                     <v-sheet v-if="hover" tile>
-                      <v-card-text>
-                        Bershka 女士 2020新款简约V领短款气质针织开衫
-                      </v-card-text>
+                      <v-card-title style="font-size: 15px">
+                        <!-- Bershka 女士 2020新款简约V领短款气质针织开衫 -->
+                        {{ item.name }}
+                      </v-card-title>
+                      <v-card-subtitle class="py-0">
+                        <strong class="red--text">
+                          ￥
+                          <span style="font-size: 15px">
+                            {{ item.price }}
+                          </span>
+                        </strong>
+                      </v-card-subtitle>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn icon>
+                          <v-icon
+                            @click="
+                              onEditItem = item;
+                              modifyDialog = true;
+                            "
+                          >
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
+                        <v-btn icon>
+                          <v-icon @click="deleteProduct(i)">
+                            mdi-trash-can-outline
+                          </v-icon>
+                        </v-btn>
+                      </v-card-actions>
                     </v-sheet>
                   </v-expand-transition>
                 </v-card>
@@ -79,7 +108,7 @@
             </v-col>
             <v-col cols="6" sm="4" md="6" lg="4">
               <v-hover v-slot="{ hover }">
-                <v-card height="300" @click="foo">
+                <v-card height="300" @click="createDialog = true">
                   <v-row class="fill-height" align="center" justify="center">
                     <v-scale-transition>
                       <v-icon class="mx-auto my-auto" :size="hover ? 100 : 50">
@@ -96,39 +125,56 @@
         <v-spacer></v-spacer>
       </v-row>
     </v-responsive>
+    <create-product v-model="createDialog"></create-product>
+    <modify-product v-model="modifyDialog" :item="onEditItem"></modify-product>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
-import rqt from "@/variables.js";
+import CreateProduct from "./CreateProduct";
+import ModifyProduct from "./ModifyProduct";
 
 export default {
-  name: "CustomerInfo",
+  name: "SalerInfo",
+  components: {
+    CreateProduct,
+    ModifyProduct,
+  },
   data: () => ({
+    createDialog: false,
+    modifyDialog: false,
+    onEditItem: null,
     userData: null,
+    productList: [],
     tableStat: {
       phone_number: false,
       password: false,
     },
   }),
   async beforeCreate() {
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const name = urlParams.get("id");
     const name = localStorage.getItem("name");
     try {
-      const response = await axios.get(rqt.api + "/api/salers/" + name + "/");
+      const response = await axios.get("/api/salers/" + name + "/");
       this.userData = response.data;
       console.log(response);
     } catch (error) {
       console.error(error);
     }
+
+    try {
+      const allProduct = await axios.get("/api/products/");
+      allProduct.data.forEach((item) => {
+        if (item.owned_saler === this.userData.name) {
+          this.productList.push(item);
+        }
+      });
+      console.log(this.productList);
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
-    foo() {},
-    getCookieName(k) {
-      return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
-    },
     updateProfile() {
       const formData = new FormData();
       if (this.userData["password"]) {
@@ -140,13 +186,28 @@ export default {
         .put("/api/salers/" + this.userData.name + "/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            "X-CSRFToken": this.getCookieName("csrftoken"),
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
           },
         })
         .then((response) => {
           console.log(response);
           confirm("Update profiles successfully!");
           window.location.reload();
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+    deleteProduct(idx) {
+      axios
+        .delete("/api/products/" + this.productList[idx].id + "/", {
+          headers: {
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
+          },
+        })
+        .then(() => {
+          confirm("Successfully delete product!");
+          this.productList = this.productList.splice(idx, 1);
         })
         .catch((error) => {
           alert(error);

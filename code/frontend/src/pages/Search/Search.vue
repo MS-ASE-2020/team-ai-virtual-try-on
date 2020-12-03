@@ -23,15 +23,22 @@
                     v-if="hover"
                     class="d-flex transition-fast-in-fast-out v-card--reveal display-3"
                     style="height: 100%"
-                    :src=" clothList[i].synImage ? clothList[i].synImage : testImg"
+                    :src="
+                      clothList[i].synImage ? clothList[i].synImage : testImg
+                    "
                   >
                   </v-img>
                 </v-expand-transition>
               </v-img>
-              <v-card-text>
+              <v-card-title style="font-size: 15px">
                 <!-- Bershka 女士 2020新款简约V领短款气质针织开衫 -->
                 {{ item.name }}
-              </v-card-text>
+              </v-card-title>
+              <v-card-subtitle>
+                <strong class="red--text">
+                  ￥ <span style="font-size: 15px"> {{ item.price }} </span>
+                </strong>
+              </v-card-subtitle>
             </v-card>
           </v-hover>
         </v-col>
@@ -48,7 +55,6 @@
 </template>
 
 <script>
-import rqt from "@/variables.js";
 import axios from "axios";
 
 export default {
@@ -62,7 +68,7 @@ export default {
     // const urlParams = new URLSearchParams(window.location.search)
     // const searchWord = urlParams.get("q")
     try {
-      const response = await axios.get(rqt.api + "/api/products/");
+      const response = await axios.get("/api/products/");
       console.log(response);
       this.clothList = response.data;
     } catch (error) {
@@ -79,22 +85,22 @@ export default {
         return;
       }
       const url =
-        rqt.api +
         "/api/tryon?" +
         "customer_name=" +
         name +
         "&product_id=" +
-        this.clothList[i].id; 
+        this.clothList[i].id;
       axios
         .get(url)
-        .then((response) =>{
-          const data = response.data
-          console.log(data[0].url)
-          this.clothList[i].synImage = rqt.api + "/media/tryon/0000_9cde8835-9079-4863-9008-a5c03be69a4f.jpg" // TODO
-          // this.clothList[i].synImage = data[0].url
+        .then((response) => {
+          const data = response.data;
+          console.log(data[0].url);
+          this.clothList[i].synImage =
+            // "/media/tryon/0000_9cde8835-9079-4863-9008-a5c03be69a4f.jpg"; // TODO
+            this.clothList[i].synImage = data[0].url;
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         });
     },
   },

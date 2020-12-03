@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import rqt from '@/variables.js'
+import axios from "axios";
 
 export default {
   name: "HomePage",
@@ -47,14 +47,14 @@ export default {
       window.location.href = "/search" + "?q=" + this.searchInput;
     },
     lucky() {
-      this.$http
-        .get(rqt.api+"/api/products/")
+      axios
+        .get("/api/products/")
         .then((response) => {
-          console.log(response)
-          window.location.href = "/productdetail?id=1"
+          console.log(response);
+          window.location.href = "/productdetail?id=" + response.data[0].id;
         })
         .catch((error) => {
-          alert(error)
+          alert(error);
         });
     },
   },

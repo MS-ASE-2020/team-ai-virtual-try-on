@@ -114,8 +114,7 @@
 </template>
 
 <script>
-import axios from "axios";
-import rqt from "@/variables.js";
+import sign from "./sign";
 
 export default {
   name: "SignInUp",
@@ -136,29 +135,10 @@ export default {
     userName: null,
   }),
   created() {
-    // function getCookieName(k) {
-    //   return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
-    // }
     this.userName = localStorage.getItem("name");
     console.log(this.userName);
   },
   methods: {
-    signOut() {
-      try {
-        let id = localStorage.getItem("isSaler");
-        if (id === "n") {
-          axios.get(rqt.api + "/api/customer/logout");
-        } else if (id === "y") {
-          axios.get(rqt.api + "/api/saler/logout");
-        }
-      } catch (error) {
-        console.log(error);
-        alert(error);
-        return;
-      }
-      localStorage.clear();
-      window.location.href = "/";
-    },
     clickIcon() {
       let id = localStorage.getItem("isSaler");
       let name = localStorage.getItem("name");
@@ -173,67 +153,14 @@ export default {
         this.dialog = true;
       }
     },
-    getCookieName(k) {
-      return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
-    },
     signIn() {
-      // alert("This feature has not been implemented!");
-      let url = rqt.api;
-      if (this.isSaler) {
-        url += "/api/saler/login";
-      } else {
-        url += "/api/customer/login";
-      }
-      axios
-        .post(url, this.signInData, {
-          headers: {
-            "X-CSRFToken": this.getCookieName("csrftoken"),
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          confirm("Sign in successfully!");
-          let data = response.data;
-
-          localStorage.setItem("name", data.name);
-          if (this.isSaler) {
-            localStorage.setItem("isSaler", "y");
-            window.location.href = "/salerinfo";
-          } else {
-            localStorage.setItem("isSaler", "n");
-            window.location.href = "/customerinfo";
-          }
-        })
-        .catch((error) => {
-          alert(error);
-        });
+      sign.in(this.signInData, this.isSaler);
+    },
+    signOut() {
+      sign.out();
     },
     signUp() {
-      const formData = new FormData();
-
-      Object.keys(this.signUpData).forEach((key) =>
-        formData.append(key, this.signUpData[key])
-      );
-      let url = rqt.api;
-      if (this.isSaler) {
-        url += "/api/saler/signup";
-      } else {
-        url += "/api/customer/signup";
-        formData.append("self_pics", this.currentFile);
-      }
-      axios
-        .post(url, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          confirm("Sign up successfully!");
-        })
-        .catch((error) => {
-          alert(error);
-        });
+      sign.up(this.signUpData, this.isSaler, this.currentFile);
     },
   },
   computed: {
