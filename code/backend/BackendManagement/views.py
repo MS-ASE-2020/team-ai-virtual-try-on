@@ -14,6 +14,8 @@ from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from drf_haystack.viewsets import HaystackViewSet
+
 from BackendManagement.serializers import *
 from BackendManagement.models import *
 from BackendManagement.permissions import IsOwner
@@ -246,3 +248,8 @@ class TryonViewSet(APIView):
         data = [{"url": path}]
         serializer = TryonSerializer(data, many=True).data
         return Response(serializer, status=status.HTTP_200_OK)
+
+
+class ProductSearchViewset(HaystackViewSet):
+    index_models = [Product]
+    serializer_class = ProductSearchSerializer
