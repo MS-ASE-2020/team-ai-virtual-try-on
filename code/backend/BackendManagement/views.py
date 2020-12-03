@@ -192,6 +192,22 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def list(self, request):
+        if len(request.query_params) == 0:
+            queryset = Product.objects.all()
+            serializer = ProductSerializer(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            try:
+                queryset = Product.objects.filter(owned_saler=request.query_params['owned_saler'])
+                serializer = ProductSerializer(queryset, many=True)
+            except Exception as e:
+                return Response({
+                    'status': 'Bad request',
+                    'message': str(e)
+                }, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data)
+
     def destroy(self, request, pk=None):
         queryset = Product.objects.all()
         obj = get_object_or_404(queryset, pk=pk)
