@@ -45,9 +45,11 @@
           </v-row>
 
           <v-row align="center">
-            <div><strong> TryOn 评分 </strong></div>
+            <div><strong> 请为本次 TryOn 评分 </strong></div>
             <v-rating
-              v-model="rating"
+              :readonly="rateClickStatus"
+              :value="rating"
+              @input="rateTryOn($event)"
               class="mx-4"
               background-color="orange lighten-3"
               color="orange"
@@ -60,7 +62,7 @@
           <v-row class="ma-4">
             <v-col>
               <v-row
-                v-for="(rate, i) in productInfo.rateList"
+                v-for="(rate, i) in rateList"
                 :key="i"
                 cols="12"
                 align="center"
@@ -68,7 +70,7 @@
                 <div class="mx-2">{{ 5 - i }}分</div>
                 <v-sheet width="300">
                   <v-progress-linear height="20" :value="rate">
-                    <strong>{{ Math.ceil(rate) }}%</strong>
+                    <strong>{{ rateNum[i] }}</strong>
                   </v-progress-linear>
                 </v-sheet>
               </v-row>
@@ -95,8 +97,11 @@ export default {
   data: () => ({
     picPos: 0,
     productInfo: null,
-    rating: 4,
+    rateNum: null,
+    rateList: null,
+    rating: 0,
     synImage: null,
+    rateClickStatus: false,
     testImg: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
   }),
   async beforeCreate() {
@@ -106,14 +111,15 @@ export default {
       const response = await axios.get("/api/products/" + id + "/");
       console.log(response);
       let data = response.data;
-      data.rateList = [
+      this.productInfo = data;
+
+      this.rateNum = [
         data.number_people_scoring_five,
         data.number_people_scoring_four,
         data.number_people_scoring_three,
         data.number_people_scoring_two,
         data.number_people_scoring_one,
       ];
-      this.productInfo = data;
     } catch (error) {
       console.error(error);
     }
@@ -125,12 +131,7 @@ export default {
       return;
     }
     const url =
-      "/api/tryon?" +
-      "customer_name=" +
-      name +
-      "&product_id=" +
-      id +
-      "/";
+      "/api/tryon?" + "customer_name=" + name + "&product_id=" + id + "/";
     try {
       const response = await axios.get(url);
       const data = response.data;
@@ -138,6 +139,67 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+  methods: {
+    rateTryOn(rate) {
+      console.log(rate);
+      let updata = {};
+      let nowRate = this.rateNum[5 - rate] + 1;
+      switch (rate) {
+        case 1: {
+          updata["number_people_scoring_one"] = nowRate;
+          break;
+        }
+        case 2: {
+          updata["number_people_scoring_two"] = nowRate;
+          break;
+        }
+        case 3: {
+          updata["number_people_scoring_three"] = nowRate;
+          break;
+        }
+        case 4: {
+          updata["number_people_scoring_four"] = nowRate;
+          break;
+        }
+        case 5: {
+          updata["number_people_scoring_five"] = nowRate;
+          break;
+        }
+        default:
+          break;
+      }
+      axios
+        .patch("/api/products/" + this.productInfo.id + "/", updata, {
+          headers: {
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
+          },
+        })
+        .then(() => {
+          // this.rateNum[5 - rate] = nowRate;
+          this.$set(this.rateNum, 5 - rate, nowRate);
+          this.rateClickStatus = true;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+  watch: {
+    rateNum() {
+      let sumStar = 0;
+      this.rateNum.forEach((item) => {
+        sumStar += item;
+      });
+      let foo = [];
+      if (sumStar === 0) {
+        sumStar = 1;
+      }
+      this.rateNum.forEach((item) => {
+        foo.push((item / sumStar) * 100);
+      });
+      this.rateList = foo;
+    },
   },
 };
 </script>
