@@ -213,15 +213,23 @@ class ProductViewSet(viewsets.ModelViewSet):
 class TryonViewSet(APIView):
     def get(self, request, *args):
         print(request.query_params)
+
+        customer_image_pose = os.path.join(settings.MEDIA_ROOT, "customers", "customer_" + request.query_params.get("customer_name"), "pose")
+        product_image_pose = os.path.join(settings.MEDIA_ROOT, "products", request.query_params.get("product_name"), "pose")
+        if not os.path.exists(customer_image_pose):
+            os.makedirs(customer_image_pose)
+        if not os.path.exists(product_image_pose):
+            os.makedirs(product_image_pose)
+
         customer_image_dir = os.path.join(settings.MEDIA_ROOT, "customers", "customer_" + request.query_params.get("customer_name"), "img")
 
         product_image_dir = os.path.join(settings.MEDIA_ROOT, "products", request.query_params.get("product_name"), "img")
 
         customer_name = "customer_" + request.query_params.get("customer_name")
         customer_image_id = os.listdir(customer_image_dir)[0]
-        product_name = "products", request.query_params.get("product_name")
+        product_name = "" + request.query_params.get("product_name")
         product_image_id = os.listdir(product_image_dir)[0]
-        # ModelInit()
+        ModelInit()
         image = tryon(customer_image_id, product_image_id, customer_name, product_name)
 
         image.save(os.path.join(settings.MEDIA_ROOT, "tryon", "{}_{}.jpg".format(request.query_params.get("customer_name"), request.query_params.get("product_name"))))

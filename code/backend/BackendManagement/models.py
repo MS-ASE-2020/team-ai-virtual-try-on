@@ -9,7 +9,7 @@ def user_directory_path(instance, filename):
 
 
 def product_directory_path(instance, filename):
-    return 'products/{}/{}'.format(instance.id, filename)
+    return 'products/{}/img/{}'.format(instance.id, filename)
 
 
 class MyUser(AbstractUser):
