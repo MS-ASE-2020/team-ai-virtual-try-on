@@ -101,7 +101,7 @@ export default {
           },
         })
         .then(() => {
-          confirm("Modify product successfully!");
+          // confirm("Modify product successfully!");
           window.location.reload();
         })
         .catch((error) => {

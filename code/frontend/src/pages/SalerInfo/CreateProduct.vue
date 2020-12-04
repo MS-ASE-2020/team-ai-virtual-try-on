@@ -85,7 +85,9 @@ export default {
       const formData = new FormData();
       formData.append("pics", this.currentFile);
       Object.keys(this.productInfo).forEach((key) => {
-        formData.append(key, this.productInfo[key]);
+        if (this.productInfo[key]) {
+          formData.append(key, this.productInfo[key]);
+        }
       });
       formData.append("owned_saler", localStorage.getItem("name"));
       axios
@@ -96,7 +98,7 @@ export default {
           },
         })
         .then(() => {
-          confirm("Create product successfully!");
+          // confirm("Create product successfully!");
           window.location.reload();
         })
         .catch((error) => {

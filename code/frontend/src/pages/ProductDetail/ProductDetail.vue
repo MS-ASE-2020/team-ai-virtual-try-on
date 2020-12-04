@@ -20,7 +20,12 @@
                 ></v-img>
               </v-carousel-item>
               <v-carousel-item>
-                <v-sheet color="transparent" v-if="!synImage" height="100%" tile>
+                <v-sheet
+                  color="transparent"
+                  v-if="!synImage"
+                  height="100%"
+                  tile
+                >
                   <v-row class="fill-height" align="center" justify="center">
                     <v-progress-circular
                       :size="50"
@@ -56,7 +61,10 @@
           </v-row>
 
           <v-row align="center">
-            <div><strong> 请为本次 TryOn 评分 </strong></div>
+            <div v-if="!rateClickStatus">
+              <strong> 请为本次 TryOn 评分 </strong>
+            </div>
+            <div v-else><strong> 感谢您的评价！！！！ </strong></div>
             <v-rating
               :readonly="rateClickStatus"
               :value="rating"
@@ -91,7 +99,44 @@
             <v-btn class="mx-4 my-6" x-large :href="productInfo.link"
               >立即购买</v-btn
             >
-            <v-btn class="mx-4 my-6" x-large>上传照片</v-btn>
+            <div class="text-center">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn class="mx-4 my-6" v-bind="attrs" v-on="on" x-large>
+                    分享照片
+                  </v-btn>
+                </template>
+                <v-list>
+                  <a
+                    :href="qzonelink"
+                    style="text-decoration: none"
+                    target="_blank"
+                  >
+                    <v-list-item>
+                      <v-list-item-title>QQ空间</v-list-item-title>
+                    </v-list-item>
+                  </a>
+                  <a
+                    :href="qfriendlink"
+                    style="text-decoration: none"
+                    target="_blank"
+                  >
+                    <v-list-item>
+                      <v-list-item-title>QQ好友</v-list-item-title>
+                    </v-list-item>
+                  </a>
+                  <a
+                    href="https://www.weibo.com"
+                    style="text-decoration: none"
+                    target="_blank"
+                  >
+                    <v-list-item>
+                      <v-list-item-title> 新浪微博 </v-list-item-title>
+                    </v-list-item>
+                  </a>
+                </v-list>
+              </v-menu>
+            </div>
           </v-row>
         </v-col>
         <v-spacer></v-spacer>
@@ -209,6 +254,35 @@ export default {
         foo.push((item / sumStar) * 100);
       });
       this.rateList = foo;
+    },
+  },
+  computed: {
+    qzonelink() {
+      let picurl = window.location.host + this.synImage;
+      let url =
+        "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=" +
+        picurl +
+        "&sharesource=qzone&title=" +
+        "tryon" +
+        "&pics=" +
+        picurl +
+        "&summary=" +
+        "快来康康我的tryon结果！";
+      return url;
+    },
+    qfriendlink() {
+      let picurl = window.location.host + this.synImage;
+      let url =
+        "http://connect.qq.com/widget/shareqq/index.html?url=" +
+        picurl +
+        "&sharesource=qzone&title=" +
+        "tryon" +
+        "&pics=" +
+        "快来看看" +
+        "&summary=" +
+        "快来康康我的tryon结果！" +
+        "&desc=";
+      return url;
     },
   },
 };

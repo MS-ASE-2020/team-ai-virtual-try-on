@@ -11,6 +11,7 @@
         dense
         rounded
         prepend-inner-icon="mdi-magnify"
+        v-model="searchInput"
       >
       </v-text-field>
     </v-sheet>
@@ -27,6 +28,9 @@ export default {
   components: {
     signinup,
   },
+  data: () => ({
+    searchInput: ''
+  }),
   methods: {
     search() {
       window.location.href = "/search" + "?q=" + this.searchInput;

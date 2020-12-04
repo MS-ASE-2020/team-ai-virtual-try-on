@@ -133,7 +133,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          confirm("Update profiles successfully!");
+          // confirm("Update profiles successfully!");
           window.location.reload();
         })
         .catch((error) => {

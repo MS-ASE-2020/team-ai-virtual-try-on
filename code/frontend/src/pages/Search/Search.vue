@@ -18,28 +18,33 @@
               class="mx-auto"
               :href="'/productdetail?id=' + item.id"
               max-width="374"
-              @mouseenter="getSynImage(i)"
+              @mouseenter="getSynImage(i + (page - 1) * 12)"
             >
-              <v-img contain max-height="350" :src="item.pics">
-                <v-expand-transition>
+              <v-img
+                contain
+                max-height="350"
+                :src="(isSearch ? '/media/' : '') + item.pics"
+              >
+                <v-fade-transition>
+                  <v-sheet  v-if="hover" color="transparent">
                   <v-progress-circular
-                    v-if="hover && sendRQT[item.id] && !clothList[i].synImage"
+                    v-if="sendRQT[item.id] && !item.synImage"
                     :size="50"
                     color="primary"
                     indeterminate
                   ></v-progress-circular>
                   <v-img
-                    v-if="hover && clothList[i].synImage"
+                    v-if="item.synImage"
                     class="d-flex transition-fast-in-fast-out v-card--reveal display-3"
                     contain
                     style="height: 100%"
-                    :src="clothList[i].synImage"
+                    :src="item.synImage"
                   >
                   </v-img>
-                </v-expand-transition>
+                  </v-sheet>
+                </v-fade-transition>
               </v-img>
               <v-card-title style="font-size: 15px">
-                <!-- Bershka 女士 2020新款简约V领短款气质针织开衫 -->
                 {{ item.name }}
               </v-card-title>
               <v-card-subtitle>
@@ -70,14 +75,21 @@ export default {
   data: () => ({
     page: 1,
     clothList: [],
+    isSearch: false,  // TOO UGLY
     sendRQT: {},
     testImg: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
   }),
   async beforeCreate() {
-    // const urlParams = new URLSearchParams(window.location.search)
-    // const searchWord = urlParams.get("q")
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchWord = urlParams.get("q");
     try {
-      const response = await axios.get("/api/products/");
+      let response = null;
+      if (searchWord) {
+        response = await axios.get("/api/search/?name=" + searchWord);
+        this.isSearch = true;
+      } else {
+        response = await axios.get("/api/products/");
+      }
       console.log(response);
       this.clothList = Object.assign([], this.clothList, response.data);
       console.log(this.clothList);
@@ -111,9 +123,9 @@ export default {
         .then((response) => {
           const data = response.data;
           console.log(data[0].url);
-          this.clothList[i].synImage =
-            // "/media/tryon/0000_9cde8835-9079-4863-9008-a5c03be69a4f.jpg"; // TODO
-            this.clothList[i].synImage = data[0].url;
+          let foo = this.clothList[i]
+          foo.synImage = data[0].url
+          this.$set(this.clothList, i ,foo)
         })
         .catch((error) => {
           console.log(error);

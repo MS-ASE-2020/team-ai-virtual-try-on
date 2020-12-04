@@ -20,7 +20,7 @@ export default {
       })
       .then((response) => {
         console.log(response);
-        confirm("Sign in successfully!");
+        // confirm("Sign in successfully!");
         let data = response.data;
 
         localStorage.setItem("name", data.name);

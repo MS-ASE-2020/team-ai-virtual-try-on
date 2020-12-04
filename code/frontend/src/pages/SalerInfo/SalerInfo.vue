@@ -58,6 +58,19 @@
 
         <v-col cols="12" md="8">
           <v-row class="mt-md-16 mb-5">
+            <v-col cols="6" sm="4" md="6" lg="4">
+              <v-hover v-slot="{ hover }">
+                <v-card height="300" @click="createDialog = true">
+                  <v-row class="fill-height" align="center" justify="center">
+                    <v-scale-transition>
+                      <v-icon class="mx-auto my-auto" :size="hover ? 100 : 50">
+                        mdi-image-plus
+                      </v-icon>
+                    </v-scale-transition>
+                  </v-row>
+                </v-card>
+              </v-hover>
+            </v-col>
             <v-col
               v-for="(item, i) in productList"
               :key="item.id"
@@ -105,19 +118,6 @@
                       </v-card-actions>
                     </v-sheet>
                   </v-expand-transition>
-                </v-card>
-              </v-hover>
-            </v-col>
-            <v-col cols="6" sm="4" md="6" lg="4">
-              <v-hover v-slot="{ hover }">
-                <v-card height="300" @click="createDialog = true">
-                  <v-row class="fill-height" align="center" justify="center">
-                    <v-scale-transition>
-                      <v-icon class="mx-auto my-auto" :size="hover ? 100 : 50">
-                        mdi-image-plus
-                      </v-icon>
-                    </v-scale-transition>
-                  </v-row>
                 </v-card>
               </v-hover>
             </v-col>
@@ -193,7 +193,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          confirm("Update profiles successfully!");
+          // confirm("Update profiles successfully!");
           window.location.reload();
         })
         .catch((error) => {
@@ -208,8 +208,8 @@ export default {
           },
         })
         .then(() => {
-          confirm("Successfully delete product!");
-          this.productList = this.productList.splice(idx, 1);
+          // confirm("Successfully delete product!");
+          window.location.reload();
         })
         .catch((error) => {
           alert(error);
