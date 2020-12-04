@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-$ python3 -m pip install django djangorestframework coreapi django-cors-headers django-revproxy
+$ python3 -m pip install django djangorestframework coreapi django-cors-headers django-revproxy drf-haystack
 ```
 
 ## Run Backend

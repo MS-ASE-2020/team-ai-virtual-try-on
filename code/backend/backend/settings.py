@@ -46,7 +46,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'revproxy',
+    'haystack'
 ]
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
 
 CORS_ORIGIN_ALLOW_ALL = True
 

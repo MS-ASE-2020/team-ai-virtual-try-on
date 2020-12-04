@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from drf_haystack.serializers import HaystackSerializer
 from django.contrib.auth import authenticate
 
+from .search_indexes import ProductIndex
 from .models import MyUser, Product
 
 import decimal
@@ -80,3 +82,10 @@ class TryonSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('url')
+
+
+class ProductSearchSerializer(HaystackSerializer):
+
+    class Meta:
+        index_classes = [ProductIndex]
+        fields = ('id', 'name', 'price', 'pics')

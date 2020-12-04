@@ -9,6 +9,7 @@ routers = routers.DefaultRouter()
 routers.register('salers', SalerViewSet)
 routers.register('customers', CustomerViewSet)
 routers.register('products', ProductViewSet)
+routers.register('search', ProductSearchViewset, basename='product-search')
 
 
 urlpatterns = [
