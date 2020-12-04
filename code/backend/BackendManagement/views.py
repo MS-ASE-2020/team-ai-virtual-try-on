@@ -128,10 +128,14 @@ class CustomerViewSet(viewsets.ModelViewSet):
         data['self_pics'] = data['self_pics'] if data.get('self_pics') else customer.self_pics
         if data.get('self_pics'):
             pics_path = os.path.join(settings.MEDIA_ROOT, 'customers', 'customer_' + str(customer), 'img')
+            tryon_path = os.path.join(settings.MEDIA_ROOT, 'customers', 'customer_' + str(customer), 'tryon')
             previous_pics = os.listdir(pics_path)
             for previous_pic in previous_pics:
                 if os.path.join('customers', 'customer_' + str(customer), 'img', previous_pic) != data['self_pics']:
                     os.remove(os.path.join(pics_path, previous_pic))
+            previous_tryon = os.listdir(tryon_path)
+            for p in previous_tryon:
+                os.remove(os.path.join(tryon_path, p))
         serializer = CustomerListSerializer(customer, data=data)
         if serializer.is_valid():
             serializer.save()
@@ -230,13 +234,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 class TryonViewSet(APIView):
     def get(self, request, *args):
-        print(request.query_params)
-        path = "/media/tryon/{}_{}.jpg".format(request.query_params.get("customer_name"), request.query_params.get("product_name"))
-        data = [{"url": path}]
-        serializer = TryonSerializer(data, many=True).data
-        if os.path.exists(os.path.join(settings.MEDIA_ROOT, "tryon", "{}_{}.jpg".format(request.query_params.get("customer_name"), request.query_params.get("product_name")))):
-            return Response(serializer, status=status.HTTP_200_OK)
-
         customer_image_pose = os.path.join(settings.MEDIA_ROOT, "customers", "customer_" + request.query_params.get("customer_name"), "pose")
         product_image_pose = os.path.join(settings.MEDIA_ROOT, "products", request.query_params.get("product_name"), "pose")
         if not os.path.exists(customer_image_pose):
@@ -253,9 +250,21 @@ class TryonViewSet(APIView):
         product_name = "" + request.query_params.get("product_name")
         product_image_id = os.listdir(product_image_dir)[0]
         
+        print(request.query_params)
+        path = "/media/customers/customer_{}/tryon/{}_{}.jpg".format(request.query_params.get("customer_name"), request.query_params.get("customer_name"), product_name)
+        tryon_dir = os.path.join(settings.MEDIA_ROOT, "customers", "customer_{}".format(request.query_params.get("customer_name")), "tryon")
+        data = [{"url": path}]
+        serializer = TryonSerializer(data, many=True).data
+        
+        if os.path.exists(os.path.join(tryon_dir, "{}_{}.jpg".format(request.query_params.get("customer_name"), request.query_params.get("product_name")))):
+            return Response(serializer, status=status.HTTP_200_OK)
+        print("Start")
         image = tryon(customer_image_id, product_image_id, customer_name, product_name)
+        print("Finish")
 
-        image.save(os.path.join(settings.MEDIA_ROOT, "tryon", "{}_{}.jpg".format(request.query_params.get("customer_name"), request.query_params.get("product_name"))))
+        if not os.path.exists(tryon_dir):
+            os.mkdir(tryon_dir)
+        image.save(os.path.join(tryon_dir, "{}_{}.jpg".format(request.query_params.get("customer_name"), product_name)))
 
         return Response(serializer, status=status.HTTP_200_OK)
 
