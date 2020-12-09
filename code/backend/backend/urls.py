@@ -27,5 +27,5 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
-    re_path(r'^(?P<path>.*)$', ProxyView.as_view(upstream='http://10.172.151.30:8080')),
+    re_path(r'^(?P<path>.*)$', ProxyView.as_view(upstream='http://10.172.151.31:8080')),
 ]
