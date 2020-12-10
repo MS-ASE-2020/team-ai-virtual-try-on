@@ -214,6 +214,25 @@ class ProductViewSet(viewsets.ModelViewSet):
                 }, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data)
 
+    def partial_update(self, request, pk=None):
+        product = Product.objects.get(pk=pk)
+        data = request.data.copy()
+        
+        if data.get('pics'):
+            pics_path = os.path.join(settings.MEDIA_ROOT, 'products', str(product.id), 'img')
+            pose_path = os.path.join(settings.MEDIA_ROOT, 'products', str(product.id), 'pose')
+            for pose in os.listdir(pose_path):
+                os.remove(os.path.join(pose_path, pose))
+            for previous_pic in os.listdir(pics_path):
+                if os.path.join('products', str(product.id), 'img', previous_pic) != data['pics']:
+                    os.remove(os.path.join(pics_path, previous_pic))
+        
+        serializer = ProductSerializer(product, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status': 'Success', 'message': "Update the product's info successfully"}, status.HTTP_200_OK)
+        return Response({'status': 'Internal Error', 'message': "Failed to update product information."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     def destroy(self, request, pk=None):
         queryset = Product.objects.all()
         obj = get_object_or_404(queryset, pk=pk)
