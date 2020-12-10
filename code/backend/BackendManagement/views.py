@@ -227,7 +227,7 @@ class ProductViewSet(viewsets.ModelViewSet):
                 if os.path.join('products', str(product.id), 'img', previous_pic) != data['pics']:
                     os.remove(os.path.join(pics_path, previous_pic))
         
-        serializer = ProductSerializer(product, data=data)
+        serializer = ProductSerializer(product, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'status': 'Success', 'message': "Update the product's info successfully"}, status.HTTP_200_OK)
