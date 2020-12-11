@@ -1,0 +1,9 @@
+django
+djangorestframework
+coreapi
+django-cors-headers
+django-revproxy
+drf-haystack
+django-contrib-comments
+django-threadedcomments
+django-fluent-comments
