@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from fluent_comments.models import FluentComment
 from drf_haystack.serializers import HaystackSerializer
 from django.contrib.auth import authenticate
 
@@ -59,6 +60,8 @@ class CustomerLoginSerializer(serializers.Serializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    comments = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
         extra_kwargs = {'id': {'read_only': True}}
@@ -73,8 +76,13 @@ class ProductSerializer(serializers.ModelSerializer):
             'number_people_scoring_four',
             'number_people_scoring_five',
             'owned_saler',
-            'pics'
+            'pics',
+            'comments'
         )
+    def get_comments(self, obj):
+        product_comment = FluentComment.objects.filter(object_pk=obj.id, parent_id=None)
+        serializer = CommentSerializer(product_comment, many=True)
+        return serializer.data
 
 
 class TryonSerializer(serializers.Serializer):
@@ -89,3 +97,25 @@ class ProductSearchSerializer(HaystackSerializer):
     class Meta:
         index_classes = [ProductIndex]
         fields = ('id', 'name', 'price', 'pics')
+
+
+class RecursiveField(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(
+            value,
+            context=self.context)
+        return serializer.data
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    children = RecursiveField(many=True)
+
+    class Meta:
+        model = FluentComment
+        fields = (
+            'comment',
+            'id',
+            'user_id',
+            'children',
+            'submit_date'
+        )

@@ -46,8 +46,17 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'revproxy',
-    'haystack'
+    'haystack',
+    'fluent_comments',
+    'threadedcomments',
+    'django_comments',
+    'django.contrib.sites'
 ]
+
+COMMENTS_APP = 'fluent_comments'
+FLUENT_COMMENTS_FORM_CLASS = 'fluent_comments.forms.CompactLabelsCommentForm'
+FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'url', 'title')
+SITE_ID = 1
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -139,7 +148,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+USE_TZ = True
+
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 

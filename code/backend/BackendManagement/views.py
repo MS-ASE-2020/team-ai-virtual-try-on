@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import login, logout
 from django.db import IntegrityError
 from django.conf import settings
+from django.utils import timezone
 
 from rest_framework import status
 from rest_framework import viewsets
@@ -15,6 +16,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from drf_haystack.viewsets import HaystackViewSet
+
+from fluent_comments.models import FluentComment
+from django.contrib.contenttypes.models import ContentType
 
 from BackendManagement.serializers import *
 from BackendManagement.models import *
@@ -291,3 +295,29 @@ class TryonViewSet(APIView):
 class ProductSearchViewset(HaystackViewSet):
     index_models = [Product]
     serializer_class = ProductSearchSerializer
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = FluentComment.objects.all()
+    serializer_class = CommentSerializer
+
+    def create(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            data = self.request.data
+            comment = data['comment']
+            product = data['product']
+            if 'parent' in data:
+                parent = data['parent']
+            else:
+                parent = None
+            submit_date = timezone.now()
+            content = ContentType.objects.get(app_label="BackendManagement", model="product").pk
+            comment = FluentComment.objects.create(object_pk=product, comment=comment, submit_date=submit_date,
+                                                   content_type_id=content, user_id=self.request.user.name, site_id=settings.SITE_ID, parent_id=parent)
+            serializer = CommentSerializer(
+                comment, context={'request': request})
+            return Response(serializer.data)
+        return Response({
+            'status': 'Bad request',
+            'message': 'Not login yet'
+        }, status.HTTP_400_BAD_REQUEST)
