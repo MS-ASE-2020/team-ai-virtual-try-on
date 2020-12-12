@@ -26,21 +26,29 @@
                 :src="(isSearch ? '/media/' : '') + item.pics"
               >
                 <v-fade-transition>
-                  <v-sheet  v-if="hover" color="transparent">
-                  <v-progress-circular
-                    v-if="sendRQT[item.id] && !item.synImage"
-                    :size="50"
-                    color="primary"
-                    indeterminate
-                  ></v-progress-circular>
-                  <v-img
-                    v-if="item.synImage"
-                    class="d-flex transition-fast-in-fast-out v-card--reveal display-3"
-                    contain
-                    style="height: 100%"
-                    :src="item.synImage"
-                  >
-                  </v-img>
+                  <v-sheet v-if="hover" color="transparent">
+                    <v-progress-circular
+                      v-if="item.sendRQT === 'send'"
+                      size="50"
+                      color="primary"
+                      indeterminate
+                    ></v-progress-circular>
+                    <v-sheet
+                      color="rgba(255, 0, 0, 0.5)"
+                      height="100%"
+                      class="pa-6"
+                      v-if="item.sendRQT === 'error'"
+                    >
+                        Something wrong happened when requesting for images
+                    </v-sheet>
+                    <v-img
+                      v-if="item.sendRQT === 'done'"
+                      class="d-flex transition-fast-in-fast-out v-card--reveal display-3"
+                      contain
+                      style="height: 100%"
+                      :src="item.synImage"
+                    >
+                    </v-img>
                   </v-sheet>
                 </v-fade-transition>
               </v-img>
@@ -75,13 +83,13 @@ export default {
   data: () => ({
     page: 1,
     clothList: [],
-    isSearch: false,  // TOO UGLY
-    sendRQT: {},
+    isSearch: false, // TOO UGLY
     testImg: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
   }),
   async beforeCreate() {
     const urlParams = new URLSearchParams(window.location.search);
     const searchWord = urlParams.get("q");
+    console.log(searchWord)
     try {
       let response = null;
       if (searchWord) {
@@ -107,11 +115,14 @@ export default {
         !name ||
         id === "y" ||
         this.clothList[i].synImage ||
-        this.sendRQT[this.clothList[i].id]
+        this.clothList[i].sendRQT
       ) {
         return;
       }
-      this.sendRQT[this.clothList[i].id] = true;
+
+      this.clothList[i].sendRQT = "send";
+      this.$set(this.clothList, i, this.clothList[i]);
+
       const url =
         "/api/tryon?" +
         "customer_name=" +
@@ -123,11 +134,15 @@ export default {
         .then((response) => {
           const data = response.data;
           console.log(data[0].url);
-          let foo = this.clothList[i]
-          foo.synImage = data[0].url
-          this.$set(this.clothList, i ,foo)
+
+          this.clothList[i].synImage = data[0].url;
+          this.clothList[i].sendRQT = "done";
+          this.$set(this.clothList, i, this.clothList[i]);
         })
         .catch((error) => {
+          this.clothList[i].sendRQT = "error";
+          this.$set(this.clothList, i, this.clothList[i]);
+
           console.log(error);
         });
     },

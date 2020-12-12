@@ -28,10 +28,14 @@
                 >
                   <v-row class="fill-height" align="center" justify="center">
                     <v-progress-circular
+                      v-if="progressCircular"
                       :size="50"
                       color="primary"
                       indeterminate
                     ></v-progress-circular>
+                    <p v-else class="black--text">
+                      Sign in as customers to see try-on images
+                    </p>
                   </v-row>
                 </v-sheet>
                 <v-img
@@ -151,6 +155,9 @@ import axios from "axios";
 export default {
   name: "ProductDetail",
   data: () => ({
+    name: null,
+    userid: null,
+    progressCircular: true,
     picPos: 0,
     productInfo: null,
     rateNum: null,
@@ -162,9 +169,9 @@ export default {
   }),
   async beforeCreate() {
     const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get("id");
+    const productId = urlParams.get("id");
     try {
-      const response = await axios.get("/api/products/" + id + "/");
+      const response = await axios.get("/api/products/" + productId + "/");
       console.log(response);
       let data = response.data;
       this.productInfo = data;
@@ -180,13 +187,19 @@ export default {
       console.error(error);
     }
 
-    const name = localStorage.getItem("name");
-    const userid = localStorage.getItem("isSaler");
+    this.name = localStorage.getItem("name");
+    this.userid = localStorage.getItem("isSaler");
 
-    if (!name || userid === "y") {
+    if (!this.name || this.userid === "y") {
+      this.progressCircular = false;
       return;
     }
-    const url = "/api/tryon?" + "customer_name=" + name + "&product_name=" + id;
+    const url =
+      "/api/tryon?" +
+      "customer_name=" +
+      this.name +
+      "&product_name=" +
+      productId;
     try {
       const response = await axios.get(url);
       const data = response.data;

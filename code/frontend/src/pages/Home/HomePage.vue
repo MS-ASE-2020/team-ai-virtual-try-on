@@ -44,7 +44,11 @@ export default {
   }),
   methods: {
     search() {
-      window.location.href = "/search" + "?q=" + this.searchInput;
+      if (this.searchInput) {
+        window.location.href = "/search" + "?q=" + this.searchInput;
+      } else {
+        window.location.href = "/search";
+      }
     },
     lucky() {
       axios

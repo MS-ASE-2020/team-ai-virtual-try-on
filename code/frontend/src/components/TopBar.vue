@@ -29,14 +29,15 @@ export default {
     signinup,
   },
   data: () => ({
-    searchInput: ''
+    searchInput: "",
   }),
   methods: {
     search() {
-      window.location.href = "/search" + "?q=" + this.searchInput;
-    },
-    bar() {
-      window.location.href = "/customerinfo";
+      if (this.searchInput) {
+        window.location.href = "/search" + "?q=" + this.searchInput;
+      } else {
+        window.location.href = "/search";
+      }
     },
   },
 };

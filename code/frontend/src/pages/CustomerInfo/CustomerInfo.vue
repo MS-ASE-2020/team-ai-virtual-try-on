@@ -26,6 +26,7 @@
             </div>
             <v-sheet v-else width="200px" height="40px">
               <v-text-field
+                autofocus
                 dense
                 flat
                 solo
@@ -43,6 +44,7 @@
             <div v-if="!tableStat.password">********</div>
             <v-sheet v-else width="200px" height="40px">
               <v-text-field
+                autofocus
                 dense
                 flat
                 solo

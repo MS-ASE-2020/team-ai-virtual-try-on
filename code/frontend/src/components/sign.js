@@ -34,7 +34,12 @@ export default {
         }
       })
       .catch((error) => {
-        alert(error);
+        if (error.response.status === 400) {
+          alert("Invalid name or password!")
+        }
+        else {
+          alert(error);
+        }
       });
   },
   out() {
