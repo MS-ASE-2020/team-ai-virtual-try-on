@@ -1,8 +1,7 @@
 <template>
-  <v-container>
+  <v-container class="pa-0">
     <v-responsive max-width="1368" class="mx-auto">
       <v-row v-if="productInfo">
-        <v-spacer></v-spacer>
         <v-col cols="12" md="5">
           <v-row justify="center" class="my-md-16">
             <v-carousel
@@ -143,7 +142,50 @@
             </div>
           </v-row>
         </v-col>
-        <v-spacer></v-spacer>
+      </v-row>
+      <v-row>
+        <v-col col="12">
+          <v-card flat outlined>
+            <v-card-actions>
+              <v-textarea
+                v-model="comment"
+                outlined
+                auto-grow
+                rows="2"
+                append-outer-icon="mdi-send"
+                label="写下你的评论"
+                @click:append-outer="sendComment"
+              ></v-textarea>
+            </v-card-actions>
+            <v-card-title>评论</v-card-title>
+            <v-list v-if="productInfo" two-line>
+              <template v-for="(item, i) in productInfo.comments">
+                <v-list-item :key="i">
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.user_id }}</v-list-item-title>
+
+                    <v-list-item-subtitle class="text--primary">
+                      {{ item.comment }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+
+                  <v-list-item-action>
+                    <v-list-item-action-text>
+                      {{
+                        item.submit_date.slice(0, item.submit_date.indexOf("T"))
+                      }}
+                    </v-list-item-action-text>
+                    <v-icon
+                      v-if="name === item.user_id"
+                      @click="deleteComment(item.id)"
+                      >mdi-delete</v-icon
+                    >
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card>
+        </v-col>
       </v-row>
     </v-responsive>
   </v-container>
@@ -165,7 +207,7 @@ export default {
     rating: 0,
     synImage: null,
     rateClickStatus: false,
-    testImg: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
+    comment: "",
   }),
   async beforeCreate() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -175,7 +217,7 @@ export default {
       console.log(response);
       let data = response.data;
       this.productInfo = data;
-
+      this.productInfo.comments.reverse();
       this.rateNum = [
         data.number_people_scoring_five,
         data.number_people_scoring_four,
@@ -209,6 +251,44 @@ export default {
     }
   },
   methods: {
+    sendComment() {
+      if (!this.name) {
+        alert("请先登录!");
+        return;
+      }
+      let commentData = {
+        comment: this.comment,
+        product: this.productInfo.id,
+      };
+      axios
+        .post("/api/comments/", commentData, {
+          headers: {
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
+          },
+        })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          alert(error);
+          console.log(error);
+        });
+    },
+    deleteComment(cid) {
+      axios
+        .delete("/api/comments/" + cid + "/", {
+          headers: {
+            "X-CSRFToken": localStorage.getItem("csrftoken"),
+          },
+        })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          alert(error);
+          console.log(error);
+        });
+    },
     rateTryOn(rate) {
       console.log(rate);
       let updata = {};
