@@ -87,6 +87,7 @@
 
 <script>
 import axios from "axios";
+import getCookieName from '@/components/GetCookie'
 
 export default {
   name: "CustomerInfo",
@@ -130,7 +131,7 @@ export default {
         .put("/api/customers/" + this.userData.name + "/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            "X-CSRFToken": localStorage.getItem("csrftoken"),
+            "X-CSRFToken": getCookieName("csrftoken"),
           },
         })
         .then((response) => {

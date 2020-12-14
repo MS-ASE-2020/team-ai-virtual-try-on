@@ -1,10 +1,8 @@
 
 import axios from 'axios'
+import getCookieName from './GetCookie'
 
 export default {
-  getCookieName(k) {
-    return (document.cookie.match("(^|; )" + k + "=([^;]*)") || 0)[2];
-  },
   in(signInData, isSaler) {
     let url = ""
     if (isSaler) {
@@ -15,7 +13,7 @@ export default {
     axios
       .post(url, signInData, {
         headers: {
-          "X-CSRFToken": this.getCookieName("csrftoken"),
+          "X-CSRFToken": getCookieName("csrftoken"),
         },
       })
       .then((response) => {
@@ -24,7 +22,6 @@ export default {
         let data = response.data;
 
         localStorage.setItem("name", data.name);
-        localStorage.setItem("csrftoken", this.getCookieName("csrftoken"))
         if (isSaler) {
           localStorage.setItem("isSaler", "y");
           window.location.href = "/salerinfo";
@@ -75,6 +72,7 @@ export default {
       .post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "X-CSRFToken": getCookieName("csrftoken"),
         },
       })
       .then((response) => {

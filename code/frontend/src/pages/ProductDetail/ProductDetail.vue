@@ -193,6 +193,7 @@
 
 <script>
 import axios from "axios";
+import getCookieName from '@/components/GetCookie'
 
 export default {
   name: "ProductDetail",
@@ -263,7 +264,7 @@ export default {
       axios
         .post("/api/comments/", commentData, {
           headers: {
-            "X-CSRFToken": localStorage.getItem("csrftoken"),
+            "X-CSRFToken": getCookieName("csrftoken"),
           },
         })
         .then(() => {
@@ -278,7 +279,7 @@ export default {
       axios
         .delete("/api/comments/" + cid + "/", {
           headers: {
-            "X-CSRFToken": localStorage.getItem("csrftoken"),
+            "X-CSRFToken": getCookieName("csrftoken"),
           },
         })
         .then(() => {
@@ -320,7 +321,7 @@ export default {
       axios
         .patch("/api/products/" + this.productInfo.id + "/", updata, {
           headers: {
-            "X-CSRFToken": localStorage.getItem("csrftoken"),
+            "X-CSRFToken": getCookieName("csrftoken"),
           },
         })
         .then(() => {

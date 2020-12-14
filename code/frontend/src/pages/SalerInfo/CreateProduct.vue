@@ -67,6 +67,8 @@
 
 <script>
 import axios from "axios";
+import getCookieName from '@/components/GetCookie'
+
 export default {
   name: "CreateProduct",
   props: {
@@ -94,7 +96,7 @@ export default {
         .post("/api/products/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            "X-CSRFToken": localStorage.getItem("csrftoken"),
+            "X-CSRFToken": getCookieName("csrftoken"),
           },
         })
         .then(() => {
