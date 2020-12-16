@@ -1,37 +1,62 @@
-## Welcome to GitHub Pages
+# AI Virtual Try On
 
-You can use the [editor on GitHub](https://github.com/MS-ASE-2020/team-ai-virtual-try-on/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+![](./imgs/results.png)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Team Members: [Bowen Zhang](https://github.com/ForeverFancy), [Youyi Zhan](https://github.com/1231234zhan), [Chuxin Wang](https://github.com/XinYuan-believe), [Shuxian Bi](https://github.com/GabyUSTC)
 
-### Markdown
+Mentors: [Bo Zhang](https://www.microsoft.com/en-us/research/people/zhanbo/), [Bartuer Zhou](https://www.researchgate.net/profile/Bartuer_Zhou)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Introduction
 
-```markdown
-Syntax highlighted code block
+This is the project of MSRA Advanced Software Engineering Class.
 
-# Header 1
-## Header 2
-### Header 3
+AI-Vitrual-Try-On enables you to try on different clothes without going to the shops in person.
 
-- Bulleted
-- List
+Click [here](http://172.23.234.84/) to get your own try-on photos.
 
-1. Numbered
-2. List
+## Deployment
 
-**Bold** and _Italic_ and `Code` text
+### Backend
 
-[Link](url) and ![Image](src)
+#### Installation
+
+```bash
+$ python3 -m pip install -r requirements.txt
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+#### Run Backend
 
-### Jekyll Themes
+```bash
+$ python3 manage.py makemigrations BackendManagement
+$ python3 manage.py migrate
+$ python3 manage.py runserver
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/MS-ASE-2020/team-ai-virtual-try-on/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### Frontend
 
-### Support or Contact
+TBA.
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### Model
+
+TBA.
+
+## Citation
+
+```
+@article{Zhang2020CrossdomainCL,
+  title={Cross-domain Correspondence Learning for Exemplar-based Image Translation},
+  author={Pan Zhang and Bo Zhang and Dong Chen and Lu Yuan and Fang Wen},
+  journal={ArXiv},
+  year={2020},
+  volume={abs/2004.05571}
+}
+
+@misc{zhou2020fullresolution,
+      title={Full-Resolution Correspondence Learning for Image Translation}, 
+      author={Xingran Zhou and Bo Zhang and Ting Zhang and Pan Zhang and Jianmin Bao and Dong Chen and Zhongfei Zhang and Fang Wen},
+      year={2020},
+      eprint={2012.02047},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
