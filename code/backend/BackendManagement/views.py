@@ -137,9 +137,10 @@ class CustomerViewSet(viewsets.ModelViewSet):
             for previous_pic in previous_pics:
                 if os.path.join('customers', 'customer_' + str(customer), 'img', previous_pic) != data['self_pics']:
                     os.remove(os.path.join(pics_path, previous_pic))
-            previous_tryon = os.listdir(tryon_path)
-            for p in previous_tryon:
-                os.remove(os.path.join(tryon_path, p))
+            if os.path.isfile(tryon_path):
+                previous_tryon = os.listdir(tryon_path)
+                for p in previous_tryon:
+                    os.remove(os.path.join(tryon_path, p))
         serializer = CustomerListSerializer(customer, data=data)
         if serializer.is_valid():
             serializer.save()
@@ -225,8 +226,9 @@ class ProductViewSet(viewsets.ModelViewSet):
         if data.get('pics'):
             pics_path = os.path.join(settings.MEDIA_ROOT, 'products', str(product.id), 'img')
             pose_path = os.path.join(settings.MEDIA_ROOT, 'products', str(product.id), 'pose')
-            for pose in os.listdir(pose_path):
-                os.remove(os.path.join(pose_path, pose))
+            if os.path.isfile(pose_path):
+                for pose in os.listdir(pose_path):
+                    os.remove(os.path.join(pose_path, pose))
             for previous_pic in os.listdir(pics_path):
                 if os.path.join('products', str(product.id), 'img', previous_pic) != data['pics']:
                     os.remove(os.path.join(pics_path, previous_pic))
