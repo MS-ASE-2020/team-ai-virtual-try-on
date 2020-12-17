@@ -1,31 +1,20 @@
 <template>
   <v-app>
-    <topbar/>
+    <top-bar></top-bar>
     <v-main>
-      <search />
+      <search-page></search-page>
     </v-main>
+    <my-footer></my-footer>
   </v-app>
 </template>
 
 <script>
-import search from "./Search";
-import topbar from "@/components/TopBar"
-
+import TopBar from "@/components/TopBar.vue";
+import SearchPage from "./Search.vue";
+import MyFooter from "@/components/MyFooter.vue";
 
 export default {
   name: "App",
-
-  components: {
-    search,
-    topbar,
-  },
-
-  data: () => ({
-    //
-  }),
-
-  methods: {
-    foo() {},
-  },
+  components: { TopBar, SearchPage, MyFooter },
 };
 </script>

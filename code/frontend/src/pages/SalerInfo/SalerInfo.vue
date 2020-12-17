@@ -19,6 +19,7 @@
             </div>
             <v-sheet v-else width="200px" height="40px">
               <v-text-field
+                autofocus
                 dense
                 flat
                 solo
@@ -36,6 +37,7 @@
             <div v-if="!tableStat.password">********</div>
             <v-sheet v-else width="200px" height="40px">
               <v-text-field
+                autofocus
                 dense
                 flat
                 solo
@@ -136,6 +138,7 @@
 import axios from "axios";
 import CreateProduct from "./CreateProduct";
 import ModifyProduct from "./ModifyProduct";
+import getCookieName from '@/components/GetCookie'
 
 export default {
   name: "SalerInfo",
@@ -188,7 +191,7 @@ export default {
         .put("/api/salers/" + this.userData.name + "/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            "X-CSRFToken": localStorage.getItem("csrftoken"),
+            "X-CSRFToken": getCookieName("csrftoken"),
           },
         })
         .then((response) => {
@@ -204,7 +207,7 @@ export default {
       axios
         .delete("/api/products/" + this.productList[idx].id + "/", {
           headers: {
-            "X-CSRFToken": localStorage.getItem("csrftoken"),
+            "X-CSRFToken": getCookieName("csrftoken"),
           },
         })
         .then(() => {

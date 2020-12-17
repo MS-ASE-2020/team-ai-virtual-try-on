@@ -1,30 +1,25 @@
 <template>
   <v-app>
-    <topbar />
+    <top-bar></top-bar>
     <v-main>
-      <customerinfo />
+      <customer-info></customer-info>
     </v-main>
+    <my-footer></my-footer>
   </v-app>
 </template>
 
 <script>
-import customerinfo from "./CustomerInfo";
-import topbar from "@/components/TopBar";
+import TopBar from "@/components/TopBar.vue";
+import CustomerInfo from "./CustomerInfo.vue";
+import MyFooter from "@/components/MyFooter.vue";
 
 export default {
   name: "App",
 
   components: {
-    customerinfo,
-    topbar,
-  },
-
-  data: () => ({
-    //
-  }),
-
-  methods: {
-    foo() {},
+    CustomerInfo,
+    TopBar,
+    MyFooter,
   },
 };
 </script>

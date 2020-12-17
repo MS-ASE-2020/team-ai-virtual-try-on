@@ -13,6 +13,7 @@
         <v-col cols="8">
           <v-text-field
             @keypress.enter="search"
+            @click:prepend-inner="search"
             prepend-inner-icon="mdi-magnify"
             rounded
             single-line
@@ -44,14 +45,19 @@ export default {
   }),
   methods: {
     search() {
-      window.location.href = "/search" + "?q=" + this.searchInput;
+      if (this.searchInput) {
+        window.location.href = "/search" + "?q=" + this.searchInput;
+      } else {
+        window.location.href = "/search";
+      }
     },
     lucky() {
       axios
         .get("/api/products/")
         .then((response) => {
           console.log(response);
-          window.location.href = "/productdetail?id=" + response.data[0].id;
+          let ra = Math.floor(Math.random() * response.data.length);
+          window.location.href = "/productdetail?id=" + response.data[ra].id;
         })
         .catch((error) => {
           alert(error);
@@ -60,3 +66,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
+
+h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 45px;
+}
+</style>

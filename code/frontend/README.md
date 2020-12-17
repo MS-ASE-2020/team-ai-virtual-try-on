@@ -1,8 +1,4 @@
-# frontend
-
-test options:
-
-    chrome.exe  --disable-web-security --user-data-dir='C:\Users\user\Downloads\test\'
+# Virtual Try-On frontend
 
 ## Project setup
 ```
@@ -23,6 +19,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

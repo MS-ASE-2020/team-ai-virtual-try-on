@@ -7,13 +7,13 @@ module.exports = {
       entry: './src/pages/Home/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: 'Home',
+      title: 'Virtual Try-On',
     },
     'search': {
       entry: './src/pages/Search/main.js',
       template: 'public/index.html',
       filename: 'search.html',
-      title: 'Search Products',
+      title: 'Search',
     },
     'productdetail': {
       entry: './src/pages/ProductDetail/main.js',
