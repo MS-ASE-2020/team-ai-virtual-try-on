@@ -18,5 +18,3 @@ export default {
   components: { TopBar, SearchPage, MyFooter },
 };
 </script>
-
-    MyFooter
