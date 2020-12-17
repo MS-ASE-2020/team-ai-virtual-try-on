@@ -34,8 +34,11 @@ $ python3 manage.py runserver
 
 ### Frontend
 
-TBA.
-
+```bash
+$ npm install
+$ npm run serve   # Compiles and hot-reloads for development
+$ npm run build   # Compiles and minifies for production
+```
 ### Model
 
 TBA.
