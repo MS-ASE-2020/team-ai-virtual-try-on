@@ -237,6 +237,12 @@ class ProductViewSet(viewsets.ModelViewSet):
             for previous_pic in os.listdir(pics_path):
                 if os.path.join('products', str(product.id), 'img', previous_pic) != data['pics']:
                     os.remove(os.path.join(pics_path, previous_pic))
+            customers_path = os.path.join(settings.MEDIA_ROOT, 'customers')
+            if os.path.exists(customers_path):
+                for customer in os.listdir(customers_path):
+                    tryon_result = os.path.join(customers_path, customer, 'tryon', '{}_{}.jpg'.format(customer[len("customer_"):], str(product.id)))
+                    if os.path.exists(tryon_result):
+                        os.remove(tryon_result)
         
         serializer = ProductSerializer(product, data=data, partial=True)
         if serializer.is_valid():
