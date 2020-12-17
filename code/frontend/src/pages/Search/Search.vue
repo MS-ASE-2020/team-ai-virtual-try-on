@@ -79,7 +79,7 @@
 import axios from "axios";
 
 export default {
-  name: "Search",
+  name: "SearchPage",
   data: () => ({
     page: 1,
     clothList: [],

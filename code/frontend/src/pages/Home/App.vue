@@ -2,37 +2,24 @@
   <v-app>
     <v-app-bar app color="transparent" flat dense>
       <v-spacer></v-spacer>
-
-      <!-- <v-btn icon small color="grey" class="mx-1"> -->
-      <signinup />
-      <!-- </v-btn> -->
+      <sign-in-up></sign-in-up>
     </v-app-bar>
     <v-main>
-      <homepage />
+      <home-page></home-page>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import homepage from "./HomePage";
-import signinup from "@/components/SignInUp";
+import HomePage from "./HomePage.vue";
+import SignInUp from "@/components/SignInUp.vue";
 
 export default {
   name: "App",
 
   components: {
-    homepage,
-    signinup,
-  },
-
-  data: () => ({
-    //
-  }),
-
-  methods: {
-    foo() {
-      window.location.href = "/customerinfo";
-    },
+    HomePage,
+    SignInUp,
   },
 };
 </script>

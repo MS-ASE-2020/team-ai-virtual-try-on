@@ -1,30 +1,21 @@
 <template>
   <v-app>
-    <topbar />
+    <top-bar></top-bar>
     <v-main>
-      <salerinfo />
+      <saler-info></saler-info>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import salerinfo from "./SalerInfo";
-import topbar from "@/components/TopBar";
+import TopBar from "@/components/TopBar.vue";
+import SalerInfo from "./SalerInfo.vue";
 
 export default {
   name: "App",
-
   components: {
-    salerinfo,
-    topbar,
-  },
-
-  data: () => ({
-    //
-  }),
-
-  methods: {
-    foo() {},
+    SalerInfo,
+    TopBar,
   },
 };
 </script>
