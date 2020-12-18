@@ -21,6 +21,7 @@ Click [here](http://172.23.234.84/) to get your own try-on photos.
 #### Installation
 
 ```bash
+$ cd code/backend
 $ python3 -m pip install -r requirements.txt
 ```
 
@@ -35,6 +36,7 @@ $ python3 manage.py runserver
 ### Frontend
 
 ```bash
+$ cd code/frontend
 $ npm install
 $ npm run serve   # Compiles and hot-reloads for development
 $ npm run build   # Compiles and minifies for production
